@@ -1,0 +1,26 @@
+//toluac++ -o source/tolua_Npc.cpp -H header/tolua_Npc.h -n Npc Npc.pkg
+
+$#include "..\header\Npc.h"
+
+
+class Npc
+{
+	Npc(int c_texture_id);
+	~Npc();
+
+
+	void moveRight(int px);
+	void moveLeft(int px);
+	void moveDown(int px);
+	void moveUp(int px);
+
+	void setText(std::string c_text);
+	void displayText();
+	void setPosition(float x, float y);
+	void scale(float x, float y);
+	void addAnimationFrames(int anim_type, std::string distribution, std::string loop_type, int num_frames, int position, int width, int height);
+
+
+	bool isTalking();
+
+};

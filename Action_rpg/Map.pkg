@@ -1,0 +1,12 @@
+//toluac++ -o source/tolua_Map.cpp -H header/tolua_Map.h -n Map Map.pkg
+
+$#include "..\header\Map.h"
+
+
+class Map
+{
+	Map(const std::string &filename);
+
+};
+
+
