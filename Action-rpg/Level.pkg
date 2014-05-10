@@ -1,0 +1,15 @@
+//toluac++ -o source/tolua_Level.cpp -H header/tolua_Level.h -n Level Level.pkg
+$#include "..\header\Level.h"
+
+class Level
+{
+	Level();
+	~Level();
+	
+
+	void addTexture(int type, std::string filename);
+	void addActor(Hero *node);
+	void addActor(Npc *node);
+	void setMap(Map *map);
+
+};
