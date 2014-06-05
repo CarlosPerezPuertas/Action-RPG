@@ -9,22 +9,22 @@
 //#include "ResourceTypes.h"
 //#include "Resources.h"
 
-class ScreenEffect;
+class Effect;
 
 
-class ScreenAffector
+class Affector
 {
 	public:
-		typedef std::function<void(ScreenEffect&, sf::Time)> Affector;
+		typedef std::function<void(Effect&, sf::Time)> MainAffector;
 
 	public:
-		virtual ~ScreenAffector(){}
-		std::function<void(ScreenEffect&, sf::Time)> get(){ return ScreenAffector::affector; }
-		virtual void init(ScreenEffect &effect) = 0;
+		virtual ~Affector(){}
+		std::function<void(Effect&, sf::Time)> get(){ return Affector::affector; }
+		virtual void init(Effect &effect) = 0;
 		
 
 	protected:
-		Affector affector;	
+		MainAffector affector;	
 };
 
 

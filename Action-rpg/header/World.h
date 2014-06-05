@@ -14,61 +14,66 @@
 #include "Level.h"
 #include "LuaScripting.h"
 #include "Camera.h"
-
-
+#include "ScreenEffect.h"
+#include "ScreenAffector.h"
+#include "TextSistem.h"
 
 
 class World
 {
 	public:
 		explicit World(sf::RenderWindow &c_window, Player &c_player);
-		
 
 		void update(const sf::Time dt);
 		void render();
-
+		
+		void doTransitions(sf::Time dt);
 		void initLevel();
+		void orderEntitiesByY();
 		void updateEntitiesCollision();
 		void updateMapCollision();
-		void orderEntitiesByY();
+		void updateCamera(sf::Time dt);
 		void broadcastCallbacks(sf::Time dt);
+		void luaObjectsToNil();
+		void deleteActors();
+		bool isGameOverEnd();
 		void drawLayers();
 
-		bool isGameOverEnd();
-		void deleteActors();
-
-		inline void addNodeToScene(std::unique_ptr<SceneNode> node) {current_level->addNode(node.get());}
+		
 		CommandQueue& getCommandQueue(){ return command_queue; }
+		inline void setFirstAnimation(int type){ first_animation = type; }
+		inline int getFirstAnimation(){ return first_animation; }
 	
-		//Script function
+	//Script function
+	public:
 		static int setLevel(lua_State *L);
 		static int setViewTarget(lua_State *L);
-
-		//static std::unique_ptr<Level> current_level;
-		
 
 	private:
 		sf::RenderWindow &window;
 		CommandQueue command_queue;
+		TextSistem text_sistem;
 		Collider collider;
 		Player &player;
 		LuaScripting script_system;
 
-	private:
+		//First = exit , Second = enter
+		std::pair<FadeAffector*, FadeAffector*> affector;
+		std::queue<Effect*> screen_effects;
+
+		int first_animation; //Initial animation taken from warp
+
 		
-		static Camera camera;
+	public:
 		static Level* current_level;
+		static Camera camera;
 		
-		//Level* current_level;
-	
 	public:
 		static bool is_new_level;
-
-		
-	private:
-		//Pacman attributes
-		bool isGameOver;
-		const float speed = 185.f;
-
+		static std::string level_script_name;
+		bool is_level_initialized;
+		bool is_transition;
+		bool is_first_effect_initialized;
+	
 };
 

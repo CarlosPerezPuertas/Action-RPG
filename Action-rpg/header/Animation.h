@@ -34,6 +34,7 @@ namespace ga
 		inline bool isUniqueLoop() { return loop_map.find(state) != loop_map.end(); }
 		inline void setUniqueLoop(int id){ loop_map.insert(id); }
 		inline bool isEndLoop(){ return end_loop; }
+		inline sf::Vector2f getFrameCenter(){ return sf::Vector2f(frame_itr->width/2.f, frame_itr->height/2.f); }
 
 	private:
 		sf::Sprite &sprite;

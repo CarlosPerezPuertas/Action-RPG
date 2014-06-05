@@ -48,6 +48,8 @@ struct ObjectGroup
 {
 	std::vector<sf::FloatRect> warp_rects;
 	std::vector<sf::Vector2f> warp_destinies;
+	std::vector<std::string> warp_level_scripts;
+	std::vector<int> warp_directions;
 };
 
 

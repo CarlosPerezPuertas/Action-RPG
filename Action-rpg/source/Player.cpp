@@ -2,157 +2,247 @@
 
 #include "..\header\Hero.h"
 #include "..\header\CommandQueue.h"
+#include "..\header\ActionTree.h"
+#include "..\core\header\GameApp.h"
 
 
 Player::Player() 
-: current_action(PlayerAction::GoLeft)
+: current_action(PlayerAction::GoDown)
 , keyboard_works(true)
+, hero(nullptr)
+, X_Pressed(true)
 {
 	key_to_action[sf::Keyboard::Left] = PlayerAction::GoLeft;
 	key_to_action[sf::Keyboard::Right] = PlayerAction::GoRight;
 	key_to_action[sf::Keyboard::Up] = PlayerAction::GoUp;
 	key_to_action[sf::Keyboard::Down] = PlayerAction::GoDown;
+	key_to_action[sf::Keyboard::X] = PlayerAction::Attack;
 
-	Command go_left; Command go_right; Command go_up; Command go_down;
+	Action go_left; Action go_right; Action go_up; Action go_down; Action attack;
+	go_left.thread_id = 0; go_right.thread_id = 0; go_up.thread_id = 0; go_down.thread_id = 0; attack.thread_id = 0;
 
-	go_left.category = Category::Player;
-	go_right.category = Category::Player;
-	go_up.category = Category::Player;
-	go_down.category = Category::Player;
-
-	
-	go_left.action = get_function<Hero>([](Hero &m_player, sf::Time dt)
+	go_left.action = get_action([&](sf::Time dt)
 	{
-		if (m_player.isActive())
+		if (hero->isActive() && !hero->isAttack())
 		{
-			if (m_player.isPossibleDirection(Direction::Left))
+			if (hero->isPossibleDirection(Direction::Left))
 			{
-				m_player.playAnimation();
-				m_player.setCurrentDirection(Direction::Left);
-				m_player.setOrientation(Direction::Left);
-				m_player.move(sf::Vector2f(-m_player.getSpeedRatio() * dt.asSeconds(), 0));
-				if (m_player.isOtherAnimation(static_cast<int>(Animations::GoLeft))) m_player.changeAnimation(static_cast<int>(Animations::GoLeft));
+				hero->playAnimation();
+				hero->setCurrentDirection(Direction::Left);
+				hero->setOrientation(Direction::Left);
+				hero->move(sf::Vector2f(-hero->getSpeedRatio() * dt.asSeconds(), 0));
+				if (hero->isOtherAnimation(static_cast<int>(Animations::GoLeft))) hero->changeAnimation(static_cast<int>(Animations::GoLeft));
 			}
-			else if (m_player.isPossibleDirection(m_player.getCurrentDirection()))
+			else if (hero->isPossibleDirection(hero->getCurrentDirection()))
 			{
-				m_player.moveByMap(m_player.getCurrentDirection(), dt);
+				hero->moveByMap(hero->getCurrentDirection(), dt);
 			}
 			else
 			{
-				m_player.stopAnimation();
-				m_player.setCurrentDirection(Direction::None);
+				hero->stopAnimation();
+				hero->setCurrentDirection(Direction::None);
 			}
 		}
+		return false;
 	});
 
-	go_right.action = get_function<Hero>([](Hero &m_player, sf::Time dt)
+	go_right.action = get_action([&](sf::Time dt)
 	{
-		if (m_player.isActive())
+		if (hero->isActive() && !hero->isAttack())
 		{
-			if (m_player.isPossibleDirection(Direction::Right))
+			if (hero->isPossibleDirection(Direction::Right))
 			{
-				m_player.playAnimation();
-				m_player.setCurrentDirection(Direction::Right);
-				m_player.setOrientation(Direction::Right);
-				m_player.move(sf::Vector2f(+m_player.getSpeedRatio() * dt.asSeconds(), 0));
-				if (m_player.isOtherAnimation(static_cast<int>(Animations::GoRight))) m_player.changeAnimation(static_cast<int>(Animations::GoRight));
+				hero->playAnimation();
+				hero->setCurrentDirection(Direction::Right);
+				hero->setOrientation(Direction::Right);
+				hero->move(sf::Vector2f(hero->getSpeedRatio() * dt.asSeconds(), 0));
+				if (hero->isOtherAnimation(static_cast<int>(Animations::GoRight))) hero->changeAnimation(static_cast<int>(Animations::GoRight));
 			}
-			else if (m_player.isPossibleDirection(m_player.getCurrentDirection()))
+			else if (hero->isPossibleDirection(hero->getCurrentDirection()))
 			{
-				m_player.moveByMap(m_player.getCurrentDirection(), dt);
+				hero->moveByMap(hero->getCurrentDirection(), dt);
 			}
 			else
 			{
-				m_player.stopAnimation();
-				m_player.setCurrentDirection(Direction::None);
+				hero->stopAnimation();
+				hero->setCurrentDirection(Direction::None);
 			}
 		}
+		return false;
 	});
 	
-	go_up.action = get_function<Hero>([](Hero &m_player, sf::Time dt)
+	go_up.action = get_action([&](sf::Time dt)
 	{ 
-		if (m_player.isActive())
+		if (hero->isActive() && !hero->isAttack())
 		{
-			if (m_player.isPossibleDirection(Direction::Up))
+			if (hero->isPossibleDirection(Direction::Up))
 			{
-				m_player.playAnimation();
-				m_player.setCurrentDirection(Direction::Up);
-				m_player.setOrientation(Direction::Up);
-				m_player.move(sf::Vector2f(0, -m_player.getSpeedRatio() * dt.asSeconds()));
-				if (m_player.isOtherAnimation(static_cast<int>(Animations::GoUp))) m_player.changeAnimation(static_cast<int>(Animations::GoUp));
+				hero->playAnimation();
+				hero->setCurrentDirection(Direction::Up);
+				hero->setOrientation(Direction::Up);
+				hero->move(sf::Vector2f(0, -hero->getSpeedRatio() * dt.asSeconds()));
+				if (hero->isOtherAnimation(static_cast<int>(Animations::GoUp))) hero->changeAnimation(static_cast<int>(Animations::GoUp));
 			}
-			else if (m_player.isPossibleDirection(m_player.getCurrentDirection()))
+			else if (hero->isPossibleDirection(hero->getCurrentDirection()))
 			{
-				m_player.moveByMap(m_player.getCurrentDirection(), dt);
+				hero->moveByMap(hero->getCurrentDirection(), dt);
 			}
 			else
 			{
-				m_player.stopAnimation();
-				m_player.setCurrentDirection(Direction::None);
+				hero->stopAnimation();
+				hero->setCurrentDirection(Direction::None);
 			}
-		}	
+		}
+
+		return false;
 	});
 	
-	go_down.action = get_function<Hero>([](Hero &m_player, sf::Time dt)
+	go_down.action = get_action([&](sf::Time dt)
 	{ 
-		if (m_player.isActive())
+		if (hero->isActive() && !hero->isAttack())
 		{
-			if (m_player.isPossibleDirection(Direction::Down))
+			if (hero->isPossibleDirection(Direction::Down))
 			{
-				m_player.playAnimation();
-				m_player.setCurrentDirection(Direction::Down);
-				m_player.setOrientation(Direction::Down);
-				m_player.move(sf::Vector2f(0, m_player.getSpeedRatio() * dt.asSeconds()));
-				if (m_player.isOtherAnimation(static_cast<int>(Animations::GoDown))) m_player.changeAnimation(static_cast<int>(Animations::GoDown));
+				hero->playAnimation();
+				hero->setCurrentDirection(Direction::Down);
+				hero->setOrientation(Direction::Down);
+				hero->move(sf::Vector2f(0, hero->getSpeedRatio() * dt.asSeconds()));
+				if (hero->isOtherAnimation(static_cast<int>(Animations::GoDown))) hero->changeAnimation(static_cast<int>(Animations::GoDown));
 			}
 
-			else if (m_player.isPossibleDirection(m_player.getCurrentDirection()))
+			else if (hero->isPossibleDirection(hero->getCurrentDirection()))
 			{
-				m_player.moveByMap(m_player.getCurrentDirection(), dt);
+				hero->moveByMap(hero->getCurrentDirection(), dt);
 			}
 			else
 			{
-				m_player.stopAnimation();
-				m_player.setCurrentDirection(Direction::None);
+				hero->stopAnimation();
+				hero->setCurrentDirection(Direction::None);
 			}
 		}
+
+		return false;
 	});
+
+	attack.action = get_action([&](sf::Time dt)
+	{
+		if (!hero->isAttack() && !X_Pressed)
+		{
+			hero->attack();
+			hero->playAnimation();
+			hero->setAttack(true);
+			X_Pressed = true;
+
+			if (hero->getOrientation() == Direction::Down)
+			{
+				if (hero->isOtherAnimation(static_cast<int>(Animations::Sword01Down))) hero->changeAnimation(static_cast<int>(Animations::Sword01Down));
+			}
+			else if (hero->getOrientation() == Direction::Up)
+			{
+				if (hero->isOtherAnimation(static_cast<int>(Animations::Sword01Up))) hero->changeAnimation(static_cast<int>(Animations::Sword01Up));
+			}
+			else if (hero->getOrientation() == Direction::Left)
+			{
+				if (hero->isOtherAnimation(static_cast<int>(Animations::Sword01Left))) hero->changeAnimation(static_cast<int>(Animations::Sword01Left));
+			}
+			else if (hero->getOrientation() == Direction::Right)
+			{
+				if (hero->isOtherAnimation(static_cast<int>(Animations::Sword01Right))) hero->changeAnimation(static_cast<int>(Animations::Sword01Right));
+			}
+		}
+
+		if (hero->isAttack() && hero->isAnimating() == false)
+		{
+			std::cout << "End down" << std::endl;
+
+			if (hero->getOrientation() == Direction::Down) hero->changeAnimation(static_cast<int>(Animations::GoDown));
+			else if (hero->getOrientation() == Direction::Up) hero->changeAnimation(static_cast<int>(Animations::GoUp));
+			else if (hero->getOrientation() == Direction::Left) hero->changeAnimation(static_cast<int>(Animations::GoLeft));
+			else if (hero->getOrientation() == Direction::Right) hero->changeAnimation(static_cast<int>(Animations::GoRight));
+
+			hero->setAttack(false);
+			hero->stopAnimation();
+
+			is_attacking = false;
+
+			return false;
+		}
+
+		if (hero->isAttack()) return true;
+		
+		
+		return false;
+		
+	});
+
 
 	action_to_command[PlayerAction::GoLeft] = go_left;
 	action_to_command[PlayerAction::GoRight] = go_right;
 	action_to_command[PlayerAction::GoUp] = go_up;
 	action_to_command[PlayerAction::GoDown] = go_down;
+	action_to_command[PlayerAction::Attack] = attack;
 }
 
 void Player::initAction(PlayerAction action)
 { 
-	current_action = action;
-	last_key_pressed = sf::Keyboard::Left;
+	//current_action = action;
+	last_key_pressed = sf::Keyboard::X;
+	//hero->pushAction(action_to_command[current_action]);
+	hero->stopAnimation();
+}
+
+void Player::releaseKeys()
+{
+	//if (GameApp::event.type == sf::Event::KeyReleased && GameApp::event.key.code == sf::Keyboard::X)
+	
+	//if (keys_pressed.find(sf::Keyboard::X) == keys_pressed.end())
+	if (GameApp::event.type == sf::Event::KeyPressed && GameApp::event.key.code == sf::Keyboard::X)
+	{
+		//std::cout << "Released" << std::endl;
+		X_Pressed = false;
+	}
+	if (hero != nullptr)
+	if (GameApp::event.type == sf::Event::KeyReleased && !hero->isAttack())
+	{
+		if (keys_pressed.find(sf::Keyboard::Left) == keys_pressed.end() && keys_pressed.find(sf::Keyboard::Right) == keys_pressed.end() &&
+			keys_pressed.find(sf::Keyboard::Down) == keys_pressed.end() && keys_pressed.find(sf::Keyboard::Up) == keys_pressed.end())
+		{
+			if (hero->isAnimating()) hero->stopAnimation();
+		}
+	}
+	
 }
 
 
-void Player::updateInput(CommandQueue &command_queue)
+void Player::updateInput(ActionTree &action_tree)
 {
 	bool direction_pressed = false;
-
+	bool attack_pressed = false;
 
 	if (keyboard_works == true)
 	{
+		releaseKeys();
+
 		for (auto &itr : key_to_action)
 		{
+			if (keys_pressed.find(sf::Keyboard::X) != keys_pressed.end())
+			{
+				attack_pressed = true;
+			}
+
+			if (keys_pressed.find(sf::Keyboard::Left) != keys_pressed.end() || keys_pressed.find(sf::Keyboard::Right) != keys_pressed.end() ||
+				keys_pressed.find(sf::Keyboard::Up) != keys_pressed.end() || keys_pressed.find(sf::Keyboard::Down) != keys_pressed.end())
+			{
+				direction_pressed = true;
+			}
+
 			//If the key is pressed add to the set. If not then delete from the set.
 			//If it's a new key then refresh the last_key_pressed and current_action
 			if (sf::Keyboard::isKeyPressed(itr.first))
 			{
-
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
-					sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-				{
-					direction_pressed = true;
-				}
-
+				
 				auto key = keys_pressed.find(itr.first);
-				if (key == keys_pressed.end() && direction_pressed)
+				if (key == keys_pressed.end() ) //&& (direction_pressed || attack_pressed)
 				{
 					last_key_pressed = itr.first;
 					keys_pressed.insert(last_key_pressed);
@@ -161,41 +251,32 @@ void Player::updateInput(CommandQueue &command_queue)
 			else
 			{
 				auto key = keys_pressed.find(itr.first);
-				if (key != keys_pressed.end()) keys_pressed.erase(itr.first);
+				if (key != keys_pressed.end())
+				{
+					keys_pressed.erase(itr.first);				
+				}		
 			}
 		}
 
 		//Only one direction 
-		if (direction_pressed)
+		if (attack_pressed)
 		{
-			current_action = key_to_action[last_key_pressed];
-			command_queue.push(action_to_command[current_action]);
-		}
-
-		if (!direction_pressed)
-		{
-			Command no_direction;
-			no_direction.category = Category::Player;
-			no_direction.action = get_function<Hero>([](Hero &m_player, sf::Time dt)
+			if (hero != nullptr)
+			if (hero->isAttack() == false )
 			{
-				if (m_player.isAnimating()) m_player.stopAnimation();
-			});
-
-			command_queue.push(no_direction);
+				//std::cout << "Attack" << std::endl;
+				is_attacking = true;
+				current_action = key_to_action[last_key_pressed];
+				hero->pushAction(action_to_command[current_action]);
+			}
 		}
+		else if (direction_pressed && last_key_pressed != sf::Keyboard::X)
+		{
+			//if (last_key_pressed == sf::Keyboard::X) std::cout << "Error" << std::endl;
+			
+			current_action = key_to_action[last_key_pressed];
+			hero->pushAction(action_to_command[current_action]);
+		}	
 	}
-
-	
-
-
-	/*if (last_key_pressed != 0 && keyboard_works == true)
-	{
-		command_queue.push(action_to_command[current_action]);
-		std::cout << "Hei" << std::endl;
-	}*/
-	
-		
-
-	//command_queue.push(action_to_command[key_to_action[last_key_pressed]]);
 }
 

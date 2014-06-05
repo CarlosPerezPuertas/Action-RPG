@@ -1,6 +1,6 @@
 updateEvents()
 
-print(collectgarbage("count"))
+--print(collectgarbage("count"))
 
 
 

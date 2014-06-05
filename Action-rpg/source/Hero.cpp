@@ -1,14 +1,21 @@
 #include "..\header\Hero.h"
+#include "..\header\ScreenEffect.h"
+
+
 
 
 
 
 Hero::Hero(int c_texture_id)
 : MoveableObject()
-, animation(Entity::sprite, sf::seconds(0.13f), 0)
-, action_queue(*this)
+, animation(Entity::sprite, sf::seconds(0.08f), 0)
+, action_tree(3)
 , texture_id(c_texture_id)
-
+, is_invincible(false)
+, is_attacking(false)
+, time_invincible(sf::Time::Zero)
+, fade(0.8, 0.1)
+, current_weapon(nullptr)
 {
 	//makeGlobal();
 	//Allowed directions
@@ -16,6 +23,10 @@ Hero::Hero(int c_texture_id)
 	possible_directions.insert(Direction::Left);
 	possible_directions.insert(Direction::Up);
 	possible_directions.insert(Direction::Down);
+
+	std::unique_ptr<Weapon> weapon(new Weapon());
+	current_weapon = weapon.get();
+	this->addChild(std::move(weapon));
 }
 
 
@@ -26,23 +37,34 @@ void Hero::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const
 		target.draw(Entity::sprite, states);
 		target.draw(Entity::collision_rect, states);
 	}
-		
-
 }
 
 void Hero::updateCurrent(CommandQueue &command_queue, const sf::Time dt)
-{
+{	
 	if (isActive())
 	{
 		animation.update(dt);
+		action_tree.update(dt);
 
 		if (is_colliding) collision_rect.setOutlineColor(sf::Color::Red);
 		else collision_rect.setOutlineColor(sf::Color::Green);
 		setCollision(false);
-	
-		
-		//action_queue.update(dt);
 	}
+
+	if (is_invincible)
+	{
+		time_invincible -= dt;
+
+		if (time_invincible == sf::Time::Zero)
+		{
+			is_invincible = false;
+		}
+	}
+}
+
+void Hero::initAnimation(const int state)
+{
+	animation.changeState(state);
 }
 
 void Hero::changeAnimation(const int state)
@@ -58,59 +80,67 @@ unsigned int Hero::getCategory() const
 	return Category::Player;
 }
 
+void Hero::attack()
+{
+	current_weapon->hit(getCurrentDirection());
+}
+
 
 
 void Hero::moveRight(int px)
 {
 	Action GoRight;
+	GoRight.is_blocking = true;
+	GoRight.thread_id = 0;
 
-
-	GoRight.action = get_action<Hero>([this, px](Hero &m_player, sf::Time dt)
+	GoRight.action = get_action([this, px](sf::Time dt)
 	{
-		return goRightUntil(px);
+		return goRightUntil(px, dt);
 	});
 
-	action_queue.push(GoRight);
+	action_tree.push(GoRight);
 }
 
 void Hero::moveLeft(int px)
 {
 	Action GoLeft;
+	GoLeft.is_blocking = true;
+	GoLeft.thread_id = 0;
 
-	GoLeft.action = get_action<Hero>([this, px](Hero &m_player, sf::Time dt)
+	GoLeft.action = get_action([this, px](sf::Time dt)
 	{
-		return this->goLeftUntil(px);
-
+		return this->goLeftUntil(px, dt);
 	});
 
-	action_queue.push(GoLeft);
+	action_tree.push(GoLeft);
 }
 
 void Hero::moveDown(int px)
 {
 	Action GoDown;
+	GoDown.is_blocking = true;
+	GoDown.thread_id = 0;
 
-	GoDown.action = get_action<Hero>([this, px](Hero &m_player, sf::Time dt)
+	GoDown.action = get_action([this, px](sf::Time dt)
 	{
-
-		return this->goDownUntil(px);
-
+		return this->goDownUntil(px, dt);
 	});
 
-	action_queue.push(GoDown);
+	action_tree.push(GoDown);
 }
 
 void Hero::moveUp(int px)
 {
 	Action GoUp;
+	GoUp.is_blocking = true;
+	GoUp.thread_id = 0;
 
-	GoUp.action = get_action<Hero>([this, px](Hero &m_player, sf::Time dt)
+	GoUp.action = get_action([this, px](sf::Time dt)
 	{
-		return this->goUpUntil(px);
-
+		return this->goUpUntil(px, dt);
 	});
 
-	action_queue.push(GoUp);
+	action_tree.push(GoUp);
 }
 
 void Hero::setPosition(sf::Vector2f pos)
@@ -139,14 +169,14 @@ void Hero::addAnimationFrames(int anim_type, std::string distribution, std::stri
 	{
 		for (int i = 0; i < num_frames; i++)
 		{
-			animation.addFrame(anim_type, sf::IntRect(i*width, (position-1) * height, width, height));
+			animation.addFrame(anim_type, sf::IntRect(i*width, position, width, height));
 		}
 	}
 	else if (distribution == "V")
 	{
 		for (int i = 0; i < num_frames; i++)
 		{
-			animation.addFrame(anim_type, sf::IntRect((position - 1) * width, i * height, width, height));
+			animation.addFrame(anim_type, sf::IntRect(position, i * height, width, height));
 		}
 
 	}
@@ -157,8 +187,21 @@ void Hero::addAnimationFrames(int anim_type, std::string distribution, std::stri
 	setVelRatio(1.f);
 }
 
+void Hero::setCollisionRect(float x, float y, float w, float h)
+{
+	Entity::setCollisionRect(sf::FloatRect(x, y, w, h));
+}
 
-
-
-
-
+void Hero::recieveDamage(float seconds)
+{ 
+	is_invincible = true; 
+	time_invincible = sf::seconds(seconds); 
+	fade.restart(1.0f, 0.1f);
+	std::unique_ptr<Effect> effect(new Effect(sprite));
+	fade.setNumLoops(8);
+	effect->setLifeTime(0.3f);
+	effect->spriteOn();
+	effect->addAffector(fade);
+	this->addChild(std::move(effect));
+	
+}

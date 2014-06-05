@@ -11,7 +11,7 @@ sprite(c_sprite)     //link with the sprite of the entity
 , playing(false)
 , end_loop(false)
 {
-
+	
 }
 
 
@@ -24,14 +24,16 @@ void ga::Animation::update(const sf::Time dt)
 		elapsed -= dt;
 		assert(iterator_initialized == true); //assert if the iterator it's not initialized
 
-		if (elapsed <= sf::Time::Zero)
+		sprite.setOrigin(frame_itr->width / 2.f, frame_itr->height / 2.f); //Origin in the center
+
+		if (elapsed <= sf::Time::Zero && end_loop == false)
 		{
 			++frame_itr;
 
 			//Restart the animation
 			if (frame_itr == frame_map[state].end())
 			{
-				if (isUniqueLoop()) { stop(); end_loop = true; }
+				if (isUniqueLoop()) { std::cout << "End loop" << std::endl, stop(); end_loop = true; }
 				frame_itr = frame_map[state].begin();
 			}
 
@@ -75,5 +77,6 @@ void ga::Animation::changeState(const int id)
 	frame_itr = frame_map[id].begin();
 	assert(frame_itr != frame_map[id].end()); //Assert if the id doesn't exist
 	sprite.setTextureRect(*frame_itr);
+	sprite.setOrigin(getFrameCenter());
 
 }

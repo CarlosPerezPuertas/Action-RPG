@@ -30,9 +30,7 @@ class LuaScripting
 			return lua_object;
 		}*/
 
-		bool callLuaFunction(std::string filename);
 		bool loadScript(std::string filename);
-		bool removeScript(std::string filename);
 		lua_State* getLuaState(){ return lua; }
 
 	private:

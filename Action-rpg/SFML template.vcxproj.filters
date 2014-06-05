@@ -126,6 +126,24 @@
     <ClCompile Include="source\Animation.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="source\TextBox.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TextSistem.cpp">
+      <Filter>Maps and Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HeroPanel.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ImageContainer.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Weapon.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ActionTree.cpp">
+      <Filter>Messaging system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\header\GameApp.h">
@@ -215,9 +233,6 @@
     <ClInclude Include="header\Collider.h">
       <Filter>Messaging system</Filter>
     </ClInclude>
-    <ClInclude Include="header\ActionQueue.h">
-      <Filter>Messaging system</Filter>
-    </ClInclude>
     <ClInclude Include="header\CommandQueue.h">
       <Filter>Messaging system</Filter>
     </ClInclude>
@@ -244,6 +259,24 @@
     </ClInclude>
     <ClInclude Include="header\EntityState.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="header\TextBox.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="header\TextSistem.h">
+      <Filter>Maps and Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="header\HeroPanel.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="header\ImageContainer.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="header\Weapon.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="header\ActionTree.h">
+      <Filter>Messaging system</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

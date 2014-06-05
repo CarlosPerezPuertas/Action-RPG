@@ -29,13 +29,13 @@ class GameApp
 		sf::RenderWindow window;
 		Player player;
 		TextureGenerator texture_generator;
-		sf::Event event;
 		StateStack state_stack;
-		//sf::View view;
 
 		sf::Time TimePerFrame;
 		sf::Time OneSecondCounter;
 		float frame_counter;
-		
+
+	public:
+		static sf::Event event;	
 };
 

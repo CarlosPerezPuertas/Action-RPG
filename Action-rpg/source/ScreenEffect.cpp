@@ -1,70 +1,96 @@
 #include "..\header\ScreenEffect.h"
 
+#include "..\header\World.h"
 
 
 
-//Create from sprite
-ScreenEffect::ScreenEffect(sf::Texture &texture)
-: sprite(texture)
+
+Effect::Effect(sf::Sprite &c_sprite)
+: sprite(c_sprite)
+, sprite_restart(c_sprite)
 , elapsed(sf::Time::Zero)
-, life_time(sf::Time::Zero)
+, lifetime(sf::Time::Zero)
 , is_clearing(false)
+, is_for_sprite(false)
 {
-
-}
-
-//Create a rectangle with the given size and color
-ScreenEffect::ScreenEffect(sf::Vector2u rect, sf::Color color = sf::Color::Black)
-{
-	sf::Image image;
-	image.create(rect.x, rect.y, color);
-	texture.loadFromImage(image);
-	sprite.setTexture(texture);
-	this->color = color;
+	
 }
 
 
-void ScreenEffect::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void Effect::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const
 {
-	states.transform *= getTransform();
-	target.draw(sprite, states);
-	if (is_clearing == true) target.draw(clear_rectangle, states);
-}
-
-void ScreenEffect::update(sf::Time df)
-{
-	for (auto &itr : affectors)
+	//states.transform *= getTransform();
+	
+	if (is_clearing == true)
 	{
-		itr(*this, df);
-		sprite.setColor(color);
+		//target.draw(sprite, states);
+		target.draw(clear_rectangle, states);
+	}
 
-		if (is_clearing == true) clear_rectangle.setFillColor(color);
-	}	
+	if (is_for_sprite == true)
+	{
+		target.draw(sprite, states);
+	}
 }
 
-void ScreenEffect::setTexture(sf::Texture &texture)
+void Effect::updateCurrent(CommandQueue &command_queue, const sf::Time dt)
+{
+	if (getCategory() != Category::ScreenEffect)
+	{
+		elapsed += dt;
+			
+		for (auto &itr : affectors) { itr(*this, dt); }
+	}
+}
+
+void Effect::updateScreen(const sf::Time dt)
+{
+	if (getCategory() == Category::ScreenEffect)
+	{
+		elapsed += dt;
+		for (auto &itr : affectors) itr(*this, dt);
+		
+		if (is_clearing == true) clear_rectangle.setFillColor(color);
+	}
+}
+
+
+/*void ScreenEffect::setTexture(sf::Texture &texture)
 {
 	sprite.setTexture(texture);
-}
+}*/
 
-void ScreenEffect::setTexture(sf::Vector2i rect, sf::Color color)
+/*void ScreenEffect::setTexture(sf::Vector2i rect, sf::Color color)
 {
 	sf::Image image;
 	image.create(rect.x, rect.y, color);
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
 	this->color = color;
+}*/
+
+bool Effect::isRunning()
+{
+	//std::cout << lifetime.asSeconds() << " " << elapsed.asSeconds() << std::endl;
+	return lifetime.asSeconds() > elapsed.asSeconds();
 }
 
-bool ScreenEffect::isRunning()
+void Effect::addClearRectangle()
 {
-	return life_time.asSeconds() > elapsed.asSeconds();
-}
+	float x = 0.0f;
+	float y = 0.0f;
 
-void ScreenEffect::addClearRectangle(sf::Vector2u window_size)
-{
+	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+
+
+	x = World::camera.getCenter().x - static_cast<float>(desktop.width/2.f);
+	y = World::camera.getCenter().y - static_cast<float>(desktop.height / 2.f);
+
 	clear_rectangle.setFillColor(sf::Color::Black);
-	clear_rectangle.setSize(static_cast<sf::Vector2f>(window_size));
+
+
+	clear_rectangle.setSize(sf::Vector2f(desktop.width, desktop.height));
+	clear_rectangle.setPosition(sf::Vector2f(x, y));
 	is_clearing = true;
 }
 

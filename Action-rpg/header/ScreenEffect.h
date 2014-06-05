@@ -9,6 +9,7 @@
 //#include "ResourceTypes.h"
 //#include "Resources.h"
 #include "ScreenAffectors.h"
+#include "SceneNode.h"
 
 
 //ScreeEffect class is used to do simple effects in the screen that are applied in the whole screen.
@@ -39,54 +40,55 @@
 */
 
 
-class ScreenEffect : public sf::Drawable, public sf::Transformable
+class Effect : public SceneNode
 {
 	public:
-		typedef std::vector<std::function<void(ScreenEffect&, sf::Time)>> Affectors;
+		typedef std::vector<std::function<void(Effect&, sf::Time)>> Affectors;
 
 	public:
-		ScreenEffect(){}
-		ScreenEffect(sf::Texture &texture);
-		ScreenEffect(sf::Vector2u rect, sf::Color color);
+		explicit Effect(sf::Sprite &c_sprite);
+		~Effect(){ std::cout << "ScreenEffect deleted " << std::endl; }
 
-		virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-		void update(sf::Time df);
-
+		virtual void drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const;
+		virtual void updateCurrent(CommandQueue &command_queue, const sf::Time dt);
+		void updateScreen(const sf::Time dt);
+		virtual unsigned int getCategory() const{ if (is_on_screen)return Category::ScreenEffect; 
+																   return Category::EntityEffect; }
+		 
 		template<typename T>
 		void addAffector(T aff);
-		void addClearRectangle(sf::Vector2u window_size);
+		void addClearRectangle();
+		void screenOn(){ is_on_screen = true; }
+		void spriteOn(){ is_for_sprite = true; }
 
-		void setTexture(sf::Texture &texture);
-		void setTexture(sf::Vector2i rect, sf::Color color);
-		inline void restart(){ elapsed = sf::Time::Zero; is_clearing = false; affectors.clear(); }
-		inline void setLifeTime(sf::Time life_time){ this->life_time = life_time; }
-		inline sf::Time getLifeTime() { return elapsed; }
-		inline void setAlpha(sf::Uint8 alpha)
-		{ 
-			sprite.setColor(sf::Color(color.r, color.g, color.b, alpha)); 
-			clear_rectangle.setFillColor(sf::Color(color.r, color.g, color.b, alpha));
-		}
-		
-		
+
+		//void setTexture(sf::Texture &texture);
+		//void setTexture(sf::Vector2i rect, sf::Color color);
+		inline void restart(){ elapsed = sf::Time::Zero; is_clearing = true; affectors.clear(); }
+		inline void setLifeTime(float lifetime){ this->lifetime = sf::seconds(lifetime); }
+		inline void setAlpha(sf::Uint8 alpha){ sprite.setColor(sf::Color(255, 255, 255, alpha)); clear_rectangle.setFillColor(sf::Color(color.r, color.g, color.b, alpha)); }
 		bool isRunning();
 	
 	public:   
 		sf::Color color;     //Attributes used in affectors
 		sf::Time elapsed;	
-		sf::Time life_time;
+		sf::Time lifetime;
+		sf::Sprite &sprite;
+		sf::Sprite sprite_restart;
 		
 	private:
-		sf::Texture texture; //Needed to create colored rectangles from sf::Image
-		sf::Sprite sprite;
-
+		
+		
+		bool is_on_screen;
 		bool is_clearing;				    // The difference between window.clear() it's that this have alpha chanel
+		bool is_for_sprite;
 		sf::RectangleShape clear_rectangle; // Used to make soft transitions
 		
 		Affectors affectors;	
 };
 
 template<typename T>
-void ScreenEffect::addAffector(T aff)
+void Effect::addAffector(T aff)
 {
 	aff.init(*this);
 	affectors.push_back(aff.get());

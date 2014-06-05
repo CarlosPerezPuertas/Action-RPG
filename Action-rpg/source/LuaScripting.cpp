@@ -72,19 +72,6 @@ bool LuaScripting::loadScript(std::string filename)
 
 }
 
-bool LuaScripting::callLuaFunction(std::string filename)
-{
-	return true;
-}
-
-
-bool LuaScripting::removeScript(std::string filename)
-{
-	
-
-	return true;
-
-}
 
 
 

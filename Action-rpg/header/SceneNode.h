@@ -15,6 +15,9 @@
 #include "Resources.h"
 #include "ResourceTypes.h"
 
+
+
+
 namespace Category
 {
 	enum Type
@@ -23,9 +26,24 @@ namespace Category
 		Player,
 		Npc,
 		Warp,
-		Text
+		Text,
+		HeroPanel,
+		LifeContainer,
+		ScreenEffect, 
+		EntityEffect,
+		Sword
 	};
 }
+
+enum class Direction
+{
+	None,
+	Left,
+	Right,
+	Up,
+	Down
+};
+
 
 
 

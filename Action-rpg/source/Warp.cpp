@@ -4,6 +4,7 @@
 Warp::Warp(sf::RectangleShape c_rect)
 : warp_rect(c_rect)
 , warp_destiny(0.f, 0.f)
+, first_animation(0)
 {
 }
 

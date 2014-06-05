@@ -126,7 +126,7 @@ void SceneNode::deleteRemovable(std::vector<SceneNode*> &scene_vector)
 
 	auto node_to_remove_begin = std::remove_if(scene_vector.begin(), scene_vector.end(), [&](SceneNode *node) {return node->isRemovable(); });
 	scene_vector.erase(node_to_remove_begin, scene_vector.end());
-	
+
 	std::for_each(children.begin(), children.end(), [&](PtrNode &node) 
 	{
 		node->deleteRemovable(scene_vector);

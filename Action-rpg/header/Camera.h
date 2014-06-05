@@ -19,6 +19,5 @@ class Camera : public sf::View
 		void update(CommandQueue &command_queue, sf::Time dt, Level &level, sf::RenderWindow &window);
 		void setTarget(const SceneNode &target, Map &map);
 		
-
 };
 

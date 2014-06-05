@@ -25,9 +25,9 @@ class LogoState : public State
 		sf::Texture texture;
 		sf::Sprite sprite;
 
-		ScreenEffect exit_effect;
+		//ScreenEffect exit_effect;
 
-		FadeAffector affector;
+		//FadeAffector affector;
 		sf::Time logo_time;
 		sf::Time exit_time;
 

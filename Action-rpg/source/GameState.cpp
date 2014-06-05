@@ -27,7 +27,7 @@ GameState::~GameState()
 void GameState::readInput()
 {
 	if (getPlayer()->isEnabled())
-	getPlayer()->updateInput(world.getCommandQueue());	
+	getPlayer()->updateInput(World::current_level->getHero()->getActionQueue());	
 }
 
 void GameState::draw()

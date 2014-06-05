@@ -18,8 +18,10 @@ struct Command
 
 struct Action
 {
-	std::function<bool(SceneNode&, sf::Time)> action;
-	
+	std::function<bool(sf::Time)> action;
+	bool is_removevable;
+	bool is_blocking;
+	unsigned int thread_id;
 };
 
 struct CommandCollision
@@ -27,6 +29,7 @@ struct CommandCollision
 	std::function<void(SceneNode&, SceneNode&)> action;
 	unsigned int category;
 };
+
 
 template<typename object, typename callback>
 std::function<void(SceneNode&, sf::Time)> get_function(callback c)
@@ -37,15 +40,12 @@ std::function<void(SceneNode&, sf::Time)> get_function(callback c)
 	};
 }
 
-template<typename object, typename callback>
-std::function<bool(SceneNode&, sf::Time)> get_action(callback c)
+template<typename callback>
+std::function<bool( sf::Time)> get_action(callback c)
 {
-	return[=](SceneNode& node, sf::Time df)
+	return[=](sf::Time dt) mutable
 	{
-		return c(static_cast<object&>(node), df);
-		
-	
-		//if(c(static_cast<object&>(node), df) == false) static_cast<object&>(node).popActionQueue();
+		return c(dt);
 	};
 }
 

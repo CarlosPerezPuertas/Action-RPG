@@ -158,6 +158,8 @@ void Map::read_TMX(const std::string &filename)
 					pugi::xml_node node_properties = node_itr.child("properties");
 
 					float x = -1, y = -1;
+					std::string level_script;
+					int animation_type = -1;
 
 					//Read warp destiny as a property
 					for (pugi::xml_node node_itr2 = node_properties.first_child(); node_itr2; node_itr2 = node_itr2.next_sibling())
@@ -166,15 +168,23 @@ void Map::read_TMX(const std::string &filename)
 
 						if (property_name == "x") x = node_itr2.attribute("value").as_float();
 						if (property_name == "y") y = node_itr2.attribute("value").as_float();
-						
+
+						if (property_name == "Lua script") level_script = node_itr2.attribute("value").as_string();
+						if (property_name == "Direction") animation_type = node_itr2.attribute("value").as_int();
 
 						if (x != -1 && y != -1)
 						{
 							object_group.warp_destinies.push_back(sf::Vector2f(x, y));
-							x = y = -1;	
+							object_group.warp_level_scripts.push_back(level_script);
+							object_group.warp_directions.push_back(animation_type);
+							x = y = -1;
 						}
-						
+
 					}
+
+					
+
+					
 				}
 			}
 		}
@@ -199,6 +209,7 @@ void Map::load_collision_map()
 		itr.rect.left = column * itr.rect.width;
 		itr.center.x = itr.rect.left + itr.rect.width / 2.f;
 		itr.center.y = itr.rect.top + itr.rect.height / 2.f;
+
 
 		
 

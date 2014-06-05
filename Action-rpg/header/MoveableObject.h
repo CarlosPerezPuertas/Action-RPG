@@ -3,25 +3,6 @@
 #include "Entity.h"
 #include "Map.h"
 
-enum class Direction
-{
-	None,
-	Up,
-	Down,
-	Left,
-	Right,
-	
-};
-
-
-enum GhostBehaviour
-{
-	None,
-	Chase,
-	Scatter,
-	Frightened,
-	CaveReturn
-};
 
 
 class MoveableObject : public Entity
@@ -40,10 +21,11 @@ class MoveableObject : public Entity
 		void goUp(sf::Time dt);
 
 		//Scripting functions
-		bool goLeftUntil(int px);
-		bool goRightUntil(int px);
-		bool goUpUntil(int px);
-		bool goDownUntil(int px);
+		bool goLeftUntil(int px, sf::Time dt);
+		bool goRightUntil(int px, sf::Time dt);
+		bool goUpUntil(int px, sf::Time dt);
+		bool goDownUntil(int px, sf::Time dt);
+		void applyForce(sf::Vector2f force, sf::Time dt);
 
 
 		inline const float getSpeed() const { return speed; }
@@ -76,28 +58,18 @@ class MoveableObject : public Entity
 		inline void setIdTileMap(int num_tile) { tile_map_id = num_tile; }
 		inline int getTileMap(){ return tile_map_id; }
 
-		inline void setFrightenedRatio(float c_frightened_ratio){ frightened_ratio = c_frightened_ratio; }
-		inline float getFrightenedRatio(){ return frightened_ratio; }
-
-		inline void setCaveRatio(float c_cave_speed_ratio){ cave_speed_ratio = c_cave_speed_ratio; }
-		inline float getCaveRatio(){ return cave_speed_ratio; }
-
 		inline void setPreviousTileType(TileType previous){ previous_tile_type = previous; }
 		inline TileType getPreviousTileType(){ return previous_tile_type; }
+		inline sf::Vector2f getLastMovement(){ return last_movement; }
 
-		inline bool isElroy1(){ return is_elroy1; }
-		inline bool isElroy2(){ return is_elroy2; }
 		
 
 	protected:
 		float speed;
 		float vel_ratio;
-		float frightened_ratio;
-		float cave_speed_ratio;
 		int  tile_map_id;
-		bool is_elroy1;
-		bool is_elroy2;
 
+		sf::Vector2f last_movement;
 		float parcial_displacement;
 
 		std::set<Direction> possible_directions;
