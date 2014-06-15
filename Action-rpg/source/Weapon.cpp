@@ -1,13 +1,13 @@
 #include "..\header\Weapon.h"
 
 
-Weapon::Weapon()
-: rect_shape(sf::Vector2f(0.f,0.f))
+Weapon::Weapon(WeaponType c_type)
+: type(c_type)
+, attack_time(sf::Time::Zero)
+, attack_time_elapsed(sf::Time::Zero)
+, attack_delay(sf::Time::Zero)
 {
-	rect_shape.setOutlineColor(sf::Color::Blue);
-	rect_shape.setOutlineThickness(0.2f);
-	rect_shape.setFillColor(sf::Color::Transparent);
-	rect_shape.setOrigin(0.f, 0.f);
+	
 }
 
 
@@ -22,10 +22,8 @@ void Weapon::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) cons
 
 void Weapon::updateCurrent(CommandQueue &command_queue, const sf::Time dt)
 {
-	attack_time -= dt;
-	
-	if (attack_time == sf::Time::Zero) rect_shape.setSize(sf::Vector2f(0.f, 0.f));
-
+	attack_time_elapsed -= dt;
+	if (attack_time_elapsed == sf::Time::Zero) rect_shape.setSize(sf::Vector2f(0.f, 0.f));
 
 	if (hasLifetime == true)
 	{
@@ -41,28 +39,32 @@ void Weapon::updateCurrent(CommandQueue &command_queue, const sf::Time dt)
 
 void Weapon::hit(Direction direction)
 {
-	attack_time = sf::seconds(0.5f);
-
+	attack_time_elapsed = attack_time;
+	rect_shape.setSize(rect_size);
+	
 	if (direction == Direction::Right)
 	{
-		setPosition(sf::Vector2f(10.f, -10.f));
-		rect_shape.setSize(sf::Vector2f(10.f, 25.f));
+		if (type == WeaponType::ObjectInHand)
+		rect_shape.setPosition(sf::Vector2f(entity_center.x + 15.f, entity_center.y));
+		rect_shape.setRotation(0);
 	}
 	else if (direction == Direction::Left)
 	{
-		setPosition(sf::Vector2f(-10.f, -10.f));
-		rect_shape.setSize(sf::Vector2f(-10.f, 25.f));
-
+		if (type == WeaponType::ObjectInHand)
+		rect_shape.setPosition(sf::Vector2f(entity_center.x - 15.f, entity_center.y));
+		rect_shape.setRotation(0);
 	}
 	else if (direction == Direction::Up)
 	{
-		setPosition(sf::Vector2f(-15.f, -5.f));
-		rect_shape.setSize(sf::Vector2f(22.f, -16.f));
+		if (type == WeaponType::ObjectInHand)
+		rect_shape.setPosition(sf::Vector2f(entity_center.x, entity_center.y - 15.f));
+		rect_shape.setRotation(90);
 	}
 	else if (direction == Direction::Down)
 	{
-		setPosition(sf::Vector2f(-8.f, 5.f));
-		rect_shape.setSize(sf::Vector2f(22.f, 14.f));
+		if (type == WeaponType::ObjectInHand)
+		rect_shape.setPosition(sf::Vector2f(entity_center.x, entity_center.y + 15.f));
+		rect_shape.setRotation(90);
 	}
 
 }

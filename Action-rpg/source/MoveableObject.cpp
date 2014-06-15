@@ -34,7 +34,6 @@ void MoveableObject::setSpeed(float c_speed, float c_ratio)
 void MoveableObject::move(const sf::Vector2f displacement)
 {
 	setPosition(getPosition() + displacement);
-
 	last_movement = displacement;
 }
 
@@ -137,6 +136,12 @@ bool MoveableObject::goDownUntil(int px, sf::Time dt)
 	}
 
 	return false;
+}
+
+bool MoveableObject::doNothing(sf::Time dt)
+{
+	return false;
+
 }
 
 void MoveableObject::applyForce(sf::Vector2f force, sf::Time dt)

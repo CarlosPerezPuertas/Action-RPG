@@ -20,6 +20,7 @@ TextureType =
 	Pinky = 4,
 	Inky = 5,
 	Clyde = 5678,
+	Alien = 7
 }
 
 --Entitities list to set entities to nil when deleted

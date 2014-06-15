@@ -5,6 +5,7 @@
 #include "ActionTree.h"
 #include "ScreenAffectors.h"
 #include "Image.h"
+#include "Weapon.h"
 
 class Npc : public MoveableObject
 {
@@ -49,9 +50,12 @@ public:
 	inline void setExplosion(Image *image){ die_explosion_effect = image; }
 	inline bool isExplosionEnd(){ assert(die_explosion_effect != nullptr);  return die_explosion_effect->isAnimationEnd(); }
 	inline void runExplosion(){ assert(die_explosion_effect != nullptr); die_explosion_effect->activate();  die_explosion_effect->play(); }
+	void addWeapon(WeaponType weapon_type, sf::Vector2f rect_size, float attack_delay, float attack_time, int damage);
 	
 	//Artificial inteligence
 	void chase(sf::Vector2f pos);
+	void patrol();
+	void attack(float attack_delay, float attack_time, int damage);
 
 	//#####SCRIPTS#####
 	//Standard functions
@@ -79,6 +83,7 @@ private:
 	int texture_id;
 	bool is_attacking;
 	Image *die_explosion_effect;
+	Weapon *current_weapon;
 
 
 	FadeAffector fade;
@@ -90,6 +95,7 @@ private:
 	//script
 	bool is_talking;
 	std::string text;
+	sf::Time stop_time; //Time doing nothing
 	
 };
 

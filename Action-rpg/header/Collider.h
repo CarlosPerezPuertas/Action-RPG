@@ -88,6 +88,11 @@ void Collider::checkCollision(T1 &entity1, T2 &entity2)
 template<typename T1>
 void Collider::checkMapCollision(T1 &entity)
 {
+	bool col_left = false;
+	bool col_right = false;
+	bool col_up = false;
+	bool col_down = false;
+
 	for (auto &i : map->tmx_info.collision_map)
 	{
 		if (i.type == TileType::Collidable)
@@ -99,25 +104,50 @@ void Collider::checkMapCollision(T1 &entity)
 				Direction dir = entity.getCurrentDirection();
 				bool bounce = false;
 
-				
 				while (entity.getCollisionRect().intersects(i.rect) == true && ((dir != Direction::None && entity.getCategory() == Category::Player) || entity.getCategory() == Category::Npc))
 				{
 					bounce = true;
 
-					if (dir == Direction::Down) {  entity.setCollisionDirection(Direction::Down); }
+					if (dir == Direction::Down) { entity.setCollisionDirection(Direction::Down);}
 					else if (dir == Direction::Up) {  entity.setCollisionDirection(Direction::Up); }
 					else if (dir == Direction::Left) {  entity.setCollisionDirection(Direction::Left); }
 					else if (dir == Direction::Right) {  entity.setCollisionDirection(Direction::Right); }		
+					
+					//To avoid that NPC and enemies trembles when collides
+					if (entity.getCategory() == Category::Npc)
+					{
+						float x = 0.f;
+						float y = 0.f;
 
-					//if(entity.getCategory() == Category::Npc) std::cout << entity.getLastMovement().x << " " << entity.getLastMovement().y << std::endl;
-					entity.move(sf::Vector2f(-(entity.getLastMovement().x), -(entity.getLastMovement().y)));
+						if (entity.getLastMovement().x > 0) x = 0.1f;
+						else if (entity.getLastMovement().x < 0) x = -0.1f;
+						if (entity.getLastMovement().y > 0) y = 0.1f;
+						else if (entity.getLastMovement().y < 0) y = -0.1f;
+
+						entity.move(sf::Vector2f(-(entity.getLastMovement().x + x), -(entity.getLastMovement().y + y)));
+					}
+					else entity.move(sf::Vector2f(-(entity.getLastMovement().x), -(entity.getLastMovement().y)));
 				}
-			
 
-				if (bounce) { entity.stopAnimation(); }
-			}
+				if (bounce) entity.stopAnimation(); 	
+				if (entity.getDownSensor().intersects(i.rect)) col_down = true;
+				if (entity.getUpSensor().intersects(i.rect)) col_up = true;
+				if (entity.getLeftSensor().intersects(i.rect)) col_left = true;
+				if (entity.getRightSensor().intersects(i.rect)) col_right = true;
+			}		
 		}
-	}	
+	}
+
+	if (col_down) { entity.addCollisionDirection(Direction::Down);   } //std::cout << "Remove down direction" << std::endl; }
+	else { entity.removeCollisionDirection(Direction::Down); }//std::cout << "Add down direction" << std::endl; }
+	if (col_up) { entity.addCollisionDirection(Direction::Up); }//std::cout << "Remove up direction" << std::endl; }
+	else { entity.removeCollisionDirection(Direction::Up); } //std::cout << "Add up direction" << std::endl; }
+	if (col_left) { entity.addCollisionDirection(Direction::Left); } //std::cout << "Remove left direction" << std::endl; }
+	else { entity.removeCollisionDirection(Direction::Left); } //std::cout << "Add left direction" << std::endl; }
+	if (col_right) { entity.addCollisionDirection(Direction::Right); } //std::cout << "Remove right direction" << std::endl; }
+	else { entity.removeCollisionDirection(Direction::Right); } //std::cout << "Add right direction" << std::endl; }
+
+	//std::cout << entity.isCollisionDirection(Direction::Down) << std::endl;;
 }
 
 //Calcule the map position using the center of the entity as a reference

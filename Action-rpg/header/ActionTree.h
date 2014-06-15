@@ -18,7 +18,9 @@ class ActionTree
 
 		void push(Action action);
 		void update(sf::Time dt);
-	
+		void deleteThread(unsigned int id);
+		unsigned int threadSize(unsigned int id);
+
 	private:
 		void addChild(Action &action);
 		void clean();

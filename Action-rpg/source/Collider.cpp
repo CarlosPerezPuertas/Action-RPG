@@ -10,6 +10,13 @@
 #include "..\core\header\GameApp.h"
 #include "..\header\Weapon.h"
 
+template<typename NodeType1, typename NodeType2>
+float distance(NodeType1 &node1, NodeType2 &node2)
+{
+	return modulus(node1.getCenter().x - node2.getCenter().x, node1.getCenter().y - node2.getCenter().y);
+}
+
+
 
 
 Collider::Collider(World &c_world, CommandQueue &c_command_queue, TextSistem &c_text_sistem, Player &c_player, LuaScripting &c_script_system)
@@ -50,7 +57,14 @@ void Collider::registerCollisions()
 	//Register actions
 	player_npc.action = get_function_collision<Hero, Npc>([this](Hero &m_player, Npc &npc)
 	{
-		npc.chase(m_player.getPosition());
+		if (!npc.isInvincible()) 
+		{
+
+			if (distance(npc, m_player) < 250.f && distance(npc, m_player) > 50.f) npc.chase(m_player.getPosition());
+			else if (distance(npc, m_player) < 50.f) npc.attack(1.f, 2.f, 1);
+			else npc.patrol();
+		}
+			
 
 		if (m_player.getCollisionRectExt().intersects(npc.getCollisionRect()) == true)
 		{
@@ -76,9 +90,9 @@ void Collider::registerCollisions()
 				m_player.stopAnimation();
 
 				//Lose one life and turn on invicible mode
-				if (m_player.isInvincible() == false)
+				if (m_player.isInvincible() == false && npc.isInvincible() == false)
 				{
-					m_player.recieveDamage(3.f);
+					m_player.recieveDamage(2.f);
 
 					Command lose_life;
 					lose_life.category = Category::HeroPanel;
@@ -184,7 +198,7 @@ void Collider::registerCollisions()
 		{
 			if (npc.isInvincible() == false)
 			{
-				npc.recieveDamage(1, 3.f);
+				npc.recieveDamage(1, 2.f);
 
 				Action force;
 				force.thread_id = 2;
@@ -280,28 +294,21 @@ void Collider::registerCollisions()
 //It's not posible to add Actors in the interactions because the vector loop it's modified in the loop causing a stackoverflow
 void Collider::checkSceneCollision(std::vector<SceneNode*> &nodes)
 {
-	
-	//nodes.resize(nodes.size());
-	//if (!nodes.empty())
-	//{
-	//std::cout << "size " << nodes.size() << std::endl;
-		std::vector<SceneNode*>::iterator first_itr = nodes.begin();
-		std::vector<SceneNode*>::iterator second_itr = first_itr;
-		second_itr++;
+	std::vector<SceneNode*>::iterator first_itr = nodes.begin();
+	std::vector<SceneNode*>::iterator second_itr = first_itr;
+	second_itr++;
 
-		while (second_itr != nodes.end())
-		{
-			for (std::vector<SceneNode*>::iterator itr = second_itr; itr != nodes.end(); ++itr)
-			{
-				
-				if (*(first_itr) != nullptr && *(itr) != nullptr)
-				if ((*(first_itr))->getCategory() != Category::Other && (*(itr))->getCategory() != Category::Other)
-				checkCollision(**first_itr, **itr);
-			}
-			second_itr++;
-			first_itr++;
+	while (second_itr != nodes.end())
+	{
+		for (std::vector<SceneNode*>::iterator itr = second_itr; itr != nodes.end(); ++itr)
+		{	
+			if (*(first_itr) != nullptr && *(itr) != nullptr)
+			if ((*(first_itr))->getCategory() != Category::Other && (*(itr))->getCategory() != Category::Other)
+			checkCollision(**first_itr, **itr);
 		}
-	//}
+		second_itr++;
+		first_itr++;
+	}
 }
 
 

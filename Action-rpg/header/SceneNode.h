@@ -7,6 +7,7 @@
 #include <map>
 #include <functional>
 #include <chrono>
+#include <random>
 #include <memory>
 #include <tolua++.h>
 

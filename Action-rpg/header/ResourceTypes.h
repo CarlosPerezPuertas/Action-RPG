@@ -1,5 +1,8 @@
 #pragma once
 
+#include "SceneNode.h"
+
+
 enum class Animations
 {
 	None,
@@ -36,6 +39,8 @@ class Resources;
 typedef Resources<sf::Texture, int> TextureGenerator;
 typedef Resources<sf::SoundBuffer, int> SoundBufferFactory;
 
+static std::mt19937 mt;
+
 
 static float modulus(float x, float y)
 {
@@ -48,5 +53,4 @@ static sf::Vector2f normalize(float x, float y)
 {
 	return sf::Vector2f(x / modulus(x, y), y / modulus(x, y));
 }
-
 

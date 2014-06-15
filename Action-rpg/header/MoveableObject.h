@@ -12,7 +12,6 @@ class MoveableObject : public Entity
 		MoveableObject(sf::Texture &texture);
 		virtual ~MoveableObject();
 
-
 		void move(const sf::Vector2f displacement);
 		void moveByMap(Direction dir, sf::Time dt);
 		void goLeft(sf::Time dt);
@@ -25,19 +24,21 @@ class MoveableObject : public Entity
 		bool goRightUntil(int px, sf::Time dt);
 		bool goUpUntil(int px, sf::Time dt);
 		bool goDownUntil(int px, sf::Time dt);
+		bool doNothing(sf::Time dt);
 		void applyForce(sf::Vector2f force, sf::Time dt);
-
 
 		inline const float getSpeed() const { return speed; }
 		inline const float getSpeedRatio() const { return speed * vel_ratio; }
 		void setSpeed(float c_speed, float c_ratio);
 		inline void setVelRatio(float c_vel_ratio){ vel_ratio = c_vel_ratio; }
 		inline float getVelRatio(){ return vel_ratio; }
-		
 
 		inline void addDirection(Direction direction){ possible_directions.insert(direction); }
 		inline void removeDirection(Direction direction){ possible_directions.erase(direction); }
 		inline bool isPossibleDirection(Direction direction){ return (possible_directions.find(direction) != possible_directions.end()) && direction != Direction::None; }
+		inline void addCollisionDirection(Direction direction){ collision_directions.insert(direction); }
+		inline void removeCollisionDirection(Direction direction){ collision_directions.erase(direction); }
+		inline bool isCollisionDirection(Direction direction){ return (collision_directions.find(direction) != collision_directions.end()); }
 		inline void setCurrentDirection(Direction direction){ current_direction = direction; parcial_displacement = 0; }
 		inline void setPreviousDirection(Direction direction){ previous_direction = direction; }
 		inline Direction getCurrentDirection(){ return current_direction; }
@@ -73,12 +74,12 @@ class MoveableObject : public Entity
 		float parcial_displacement;
 
 		std::set<Direction> possible_directions;
+		std::set<Direction> collision_directions;
 		Direction current_direction;
 		Direction previous_direction;
 		Direction orientation;
 		Direction collision_direction;
 		std::map<Direction, sf::Vector2f> movement_map;
-
 		TileType previous_tile_type;
 };
 

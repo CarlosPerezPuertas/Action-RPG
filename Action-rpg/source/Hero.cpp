@@ -17,16 +17,13 @@ Hero::Hero(int c_texture_id)
 , fade(0.8, 0.1)
 , current_weapon(nullptr)
 {
-	//makeGlobal();
 	//Allowed directions
 	possible_directions.insert(Direction::Right);
 	possible_directions.insert(Direction::Left);
 	possible_directions.insert(Direction::Up);
 	possible_directions.insert(Direction::Down);
 
-	std::unique_ptr<Weapon> weapon(new Weapon());
-	current_weapon = weapon.get();
-	this->addChild(std::move(weapon));
+	addWeapon(WeaponType::ObjectInHand, sf::Vector2f(12.5f, 25.f), 0.f, 0.5f, 1);
 }
 
 
@@ -36,6 +33,10 @@ void Hero::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const
 	{
 		target.draw(Entity::sprite, states);
 		target.draw(Entity::collision_rect, states);
+		target.draw(Entity::up_sensor_rect, states);
+		target.draw(Entity::down_sensor_rect, states);
+		target.draw(Entity::left_sensor_rect, states);
+		target.draw(Entity::right_sensor_rect, states);
 	}
 }
 
@@ -204,4 +205,15 @@ void Hero::recieveDamage(float seconds)
 	effect->addAffector(fade);
 	this->addChild(std::move(effect));
 	
+}
+
+void Hero::addWeapon(WeaponType weapon_type, sf::Vector2f rect_size, float attack_delay, float attack_time, int damage)
+{
+	std::unique_ptr<Weapon> weapon(new Weapon(weapon_type));
+	current_weapon = weapon.get();
+	current_weapon->setRect(rect_size);
+	current_weapon->setAttackDelay(attack_delay);
+	current_weapon->setAttackTime(attack_time);
+	current_weapon->setDamage(damage);
+	this->addChild(std::move(weapon));
 }

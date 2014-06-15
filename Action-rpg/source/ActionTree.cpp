@@ -89,3 +89,17 @@ void ActionTree::update(sf::Time dt)
 	}
 }
 
+void ActionTree::deleteThread(unsigned int id)
+{
+	assert(action_threads.size() > id && id > 0);
+
+	if (!action_threads[id - 1].empty())
+	while (!action_threads[id-1].empty()) action_threads[id-1].pop();
+}
+
+unsigned int ActionTree::threadSize(unsigned int id)
+{
+	assert(action_threads.size() > id && id > 0);
+	return action_threads[id-1].size();
+}
+

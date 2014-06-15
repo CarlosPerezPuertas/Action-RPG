@@ -4,7 +4,7 @@
 
 Npc::Npc(int c_texture_id)
 : MoveableObject()
-, action_tree(3)
+, action_tree(4)
 , animation(Entity::sprite, sf::seconds(0.1f), 0)
 , is_talking(false)
 , texture_id(c_texture_id)
@@ -13,11 +13,12 @@ Npc::Npc(int c_texture_id)
 , time_invincible(sf::seconds(0.f))
 , fade(0.8, 0.1)
 , life(2)
+, stop_time(sf::Time::Zero)
 , die_explosion_effect(nullptr)
+, current_weapon(nullptr)
 {
-	
-
 	setSpeed(100, 0.75f);
+	addWeapon(WeaponType::ObjectInHand, sf::Vector2f(12.5f, 25.f), 0.f, 0.5f, 1);
 }
 
 
@@ -34,26 +35,20 @@ void Npc::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const
 	{
 		target.draw(Entity::sprite, states);
 		target.draw(Entity::collision_rect, states);
-		//if (die_explosion_effect != nullptr)
-		//if (die_explosion_effect->isActive()) target.draw(*die_explosion_effect, states);
-	}
-		
+	}		
 }
 
 void Npc::updateCurrent(CommandQueue &command_queue, const sf::Time dt)
 {
-	
-
 	if (isActive())
 	{
 		updateAnimation(dt);
 		action_tree.update(dt);
 		
-
-		if (getCurrentDirection() == Direction::Left) goLeft(dt);
-		else if (getCurrentDirection() == Direction::Right) goRight(dt);
-		else if (getCurrentDirection() == Direction::Up) goUp(dt);
-		else if (getCurrentDirection() == Direction::Down) goDown(dt);
+		//if (getCurrentDirection() == Direction::Left) goLeft(dt);
+		//else if (getCurrentDirection() == Direction::Right) goRight(dt);
+		//else if (getCurrentDirection() == Direction::Up) goUp(dt);
+		//else if (getCurrentDirection() == Direction::Down) goDown(dt);
 
 		if (is_invincible)
 		{
@@ -157,8 +152,8 @@ void Npc::recieveDamage(int damage, float seconds)
 	time_invincible = sf::seconds(seconds);
 	fade.restart(1.0f, 0.1f);
 	std::unique_ptr<Effect> effect(new Effect(sprite));
-	fade.setNumLoops(25);
-	effect->setLifeTime(0.1f);
+	fade.setNumLoops(35);
+	effect->setLifeTime(0.05f);
 	effect->spriteOn();
 	effect->addAffector(fade);
 	this->addChild(std::move(effect));
@@ -382,18 +377,92 @@ void Npc::displayText()
 
 void Npc::chase(sf::Vector2f pos)
 {
+	action_tree.deleteThread(3);
+
 	Action chase;
-	chase.thread_id = 1;
+	chase.thread_id = 2;
 	chase.action = get_action([this, pos](sf::Time dt)
 	{
+		
 		sf::Vector2f normal = normalize(pos.x - getPosition().x, pos.y - getPosition().y);
-		//std::cout << normal.x << "" << normal.y << std::endl;
-		move(sf::Vector2f(normal.x * 100.f * dt.asSeconds(), normal.y * 100.f * dt.asSeconds()));
+		float x = normal.x ;
+		float y = normal.y ;
+
+		if ((isCollisionDirection(Direction::Left) && x < 0.f) || (isCollisionDirection(Direction::Right) && x > 0.f)) { x = 0.f; if (y > 0.f) y = 1.f; else if (y < 0.f)  y = -1.f; }
+		if ((isCollisionDirection(Direction::Up) && y < 0.f) || (isCollisionDirection(Direction::Down) && y > 0.f))   { y = 0.f;  if (x > 0.f)x = 1.f;  else if (x < 0.f) x = -1.f; }
+
+		x = x * 100.f * dt.asSeconds();
+		y = y * 100.f * dt.asSeconds();
+
+		playAnimation();
+		if (x > 0 && abs(x) > abs(y)) { if (getCurrentDirection() != Direction::Right) { setCurrentDirection(Direction::Right); changeAnimation(static_cast<int>(Animations::GoRight)); } }
+		if (x < 0 && abs(x) > abs(y)) { if (getCurrentDirection() != Direction::Left) { setCurrentDirection(Direction::Left); changeAnimation(static_cast<int>(Animations::GoLeft)); } }
+		if (y > 0 && abs(x) < abs(y)) { if (getCurrentDirection() != Direction::Down) { setCurrentDirection(Direction::Down); changeAnimation(static_cast<int>(Animations::GoDown)); } }
+		if (y < 0 && abs(x) < abs(y)) { if (getCurrentDirection() != Direction::Up) { setCurrentDirection(Direction::Up); changeAnimation(static_cast<int>(Animations::GoUp)); } }
+		
+		//std::cout <<x << " " << y << std::endl;
+		//std::cout << this->isCollisionDirection(Direction::Left) << " " << this->isCollisionDirection(Direction::Right) << " " << isCollisionDirection(Direction::Down) << " " << isCollisionDirection(Direction::Up) << std::endl;
+		
+		move(sf::Vector2f(x, y));
 		return false;
 	});
 
 	pushAction(chase);
+}
 
+void Npc::patrol()
+{
+	playAnimation();
+	
+	std::discrete_distribution<int> dir_distribution({60, 10, 10, 10, 10});
+	std::uniform_int_distribution<int> distance_distribution(50, 100);
+	std::uniform_real_distribution<float> wait_time_distribution(1.f, 3.f);
+	Direction dir = static_cast<Direction>(dir_distribution(mt));
+	int distance = distance_distribution(mt);
+	if (stop_time == sf::Time::Zero) stop_time = sf::seconds(wait_time_distribution(mt));
+	
+	Action patrol;
+	patrol.thread_id = 3;
+	patrol.action = get_action([this, dir, distance](sf::Time dt)
+	{
+		if (dir == Direction::Left) {  return goLeftUntil(distance, dt); }
+		else if (dir == Direction::Right) return goRightUntil(distance, dt);
+		else if (dir == Direction::Up) return goUpUntil(distance, dt);
+		else if (dir == Direction::Down) return goDownUntil(distance, dt);
+		else if (dir == Direction::None) 
+		{
+			stopAnimation();
+			stop_time -= dt;
+			if (stop_time > sf::Time::Zero)return true;
+			stop_time = sf::Time::Zero;
+			return false;
+		}
+		stop_time = sf::Time::Zero;
+		return false;
+	});
+
+	//When we have 2 actions we stop action addition
+	unsigned int max_actions = 2;
+	if (action_tree.threadSize(patrol.thread_id) < max_actions)
+	{
+		pushAction(patrol);
+	}
+}
+
+void Npc::attack(float attack_delay, float attack_time, int damage)
+{
+	current_weapon->hit(Direction::Left);
+}
+
+void Npc::addWeapon(WeaponType weapon_type, sf::Vector2f rect_size, float attack_delay, float attack_time, int damage)
+{
+	std::unique_ptr<Weapon> weapon(new Weapon(weapon_type));
+	current_weapon = weapon.get();
+	current_weapon->setRect(rect_size);
+	current_weapon->setAttackDelay(attack_delay);
+	current_weapon->setAttackTime(attack_time);
+	current_weapon->setDamage(damage);
+	this->addChild(std::move(weapon));
 }
 
 

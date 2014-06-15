@@ -29,6 +29,7 @@ class Hero : public MoveableObject
 		void pushAction(Action &action){ action_tree.push(action); }
 		ActionTree& getActionQueue(){ return action_tree; }
 		Weapon* getWeapon(){ return current_weapon; }
+		void addWeapon(WeaponType weapon_type, sf::Vector2f rect_size, float attack_delay, float attack_time, int damage);
 
 		void attack();
 		void recieveDamage(float seconds);

@@ -48,8 +48,8 @@ void World::update(const sf::Time dt)
 	{
 		orderEntitiesByY();
 		broadcastCallbacks(dt);
-		updateEntitiesCollision();
 		updateMapCollision();
+		updateEntitiesCollision();
 	}
 
 	updateCamera(dt);
