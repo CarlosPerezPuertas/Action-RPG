@@ -5138,6 +5138,8 @@ namespace pugi
 
 		// allocate new root
 		_root = new (page->data) impl::xml_document_struct(page);
+
+		if (_root != nullptr)
 		_root->prev_sibling_c = _root;
 
 		// setup sentinel page
@@ -6674,6 +6676,7 @@ PUGI__NS_BEGIN
 
 		T* result = new (memory) T();
 
+		if (result != nullptr)
 		memcpy(result->name, name, (length + 1) * sizeof(char_t));
 
 		return result;

@@ -10,6 +10,8 @@ class Level
 	void addTexture(int type, std::string filename);
 	void addActor(Hero *node);
 	void addActor(Npc *node);
+	void addActor(Enemy *node);
+
 	void setMap(Map *map);
 
 };

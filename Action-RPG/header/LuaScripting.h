@@ -11,6 +11,8 @@
 #include "tolua_Npc.h"
 #include "tolua_Map.h"
 #include "tolua_Hero.h"
+#include "tolua_Enemy.h"
+#include "tolua_Door.h"
 
 
 class Level;
@@ -30,9 +32,7 @@ class LuaScripting
 			return lua_object;
 		}*/
 
-		bool callLuaFunction(std::string filename);
 		bool loadScript(std::string filename);
-		bool removeScript(std::string filename);
 		lua_State* getLuaState(){ return lua; }
 
 	private:

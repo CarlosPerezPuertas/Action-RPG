@@ -7,7 +7,7 @@
 #include "..\..\header\CommandQueue.h"
 
 
-
+sf::Event GameApp::event;
 
 GameApp::GameApp() :
 window(sf::VideoMode::getDesktopMode(), "Pacman")  //sf::Style::Fullscreen
@@ -16,6 +16,8 @@ window(sf::VideoMode::getDesktopMode(), "Pacman")  //sf::Style::Fullscreen
 , OneSecondCounter(sf::Time::Zero)
 , state_stack(window, player, texture_generator)
 {
+	window.setKeyRepeatEnabled(false);
+
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	float scale_factor = 0.f;
 	
@@ -70,31 +72,33 @@ void GameApp::run()
 
 void GameApp::readInput()
 {
-	
 	//Input common to all states
 	if (window.pollEvent(event))
 	{
+		//if (event.type == sf::Event::KeyReleased) std::cout << "Key released" << std::endl;
+		//else if (event.type == sf::Event::KeyPressed) std::cout << "Key pressed" << std::endl;
+
 		if (event.type == sf::Event::Closed)
 			window.close();
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 			window.close();
 
 		//Start Screen read input
-		if (event.type == sf::Event::KeyPressed)
+		else if (event.type == sf::Event::KeyPressed)
 		if (state_stack.isEmpty() == false) state_stack.setIskeyPressed(true);
 
-		if (event.type == sf::Event::KeyReleased)
+		else if (event.type == sf::Event::KeyReleased)
 		if (state_stack.isEmpty() == false) state_stack.setIskeyPressed(false);
-
 	}
 
-	//Update and collect commands. Each state input processing is different. WE apply polymorfism
+	//Update and collect commands. Each state input processing is different. Wè apply polymorfism
 	state_stack.readInput();
 }
 
 void GameApp::update(sf::Time df)
 {
+
 	state_stack.update(df);
 }
 

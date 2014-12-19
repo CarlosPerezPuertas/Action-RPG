@@ -12,6 +12,8 @@ LuaScripting::LuaScripting()
 	tolua_Npc_open(lua);
 	tolua_Map_open(lua);
 	tolua_Hero_open(lua);
+	tolua_Enemy_open(lua);
+	tolua_Door_open(lua);
 
 	//CONSTANT FROM ENUMS BINDINGS
 	lua_pushnumber(lua, 0);
@@ -41,6 +43,8 @@ LuaScripting::LuaScripting()
 	lua_setglobal(lua, "setViewTarget");
 	lua_pushcfunction(lua, &World::setLevel);
 	lua_setglobal(lua, "setLevel");
+	lua_pushcfunction(lua, &World::tiledGetDoor);
+	lua_setglobal(lua, "tiledGetDoor");
 	
 }
 
@@ -72,19 +76,6 @@ bool LuaScripting::loadScript(std::string filename)
 
 }
 
-bool LuaScripting::callLuaFunction(std::string filename)
-{
-	return true;
-}
-
-
-bool LuaScripting::removeScript(std::string filename)
-{
-	
-
-	return true;
-
-}
 
 
 

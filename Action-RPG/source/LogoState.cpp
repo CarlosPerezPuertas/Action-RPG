@@ -7,10 +7,11 @@ LogoState::LogoState(StateStack &c_state_stack, sf::RenderWindow &c_window, Play
 , logo_time(sf::seconds(2.f))
 , exit_time(sf::seconds(1.f))
 //, exit_effect(getWindow().getSize(), sf::Color(0, 0, 0))
-, affector(0.f, 1.f)
+//, exit_effect(sf::Sprite())
+//, affector(0.f, 1.f)
 {
-	exit_effect.setPosition(sf::Vector2f(-400.f, -400.f));
-	exit_effect.scale(sf::Vector2f(2.f, 2.f));
+	//exit_effect.setPosition(sf::Vector2f(-400.f, -400.f));
+	//exit_effect.scale(sf::Vector2f(2.f, 2.f));
 	texture.loadFromFile("textures/Logotipo.png");
 	sprite.setTexture(texture);
 	sprite.setPosition(sf::Vector2f(0.f, 90.f));
@@ -56,31 +57,32 @@ void LogoState::enterDraw()
 
 void LogoState::exitUpdate(sf::Time df)
 {
-	exit_effect.update(df);
-	if (!exit_effect.isRunning())
-	{
+	//exit_effect.update(df);
+	//if (!exit_effect.isRunning())
+	//{
 		requestPush(StateName::StartMenu);
 		setTransitionState(Transitions::OnEnter);
 		std::cout << "Logo to onEnter StartMenu" << std::endl;
-	}
+	//}
 	
 }
 
 
 void LogoState::exitDraw()
 {
-	getWindow().draw(exit_effect);	
+	//getWindow().draw(exit_effect);	
 }
 
+//Clear rectangle needs camera and it's in World now
 void LogoState::restart()
 {
 	logo_time = sf::seconds(2.f);
 	exit_time = sf::seconds(1.f);
 	
-	exit_effect.restart();
+	/*exit_effect.restart();
 	exit_effect.setLifeTime(exit_time);
-	exit_effect.addClearRectangle(getWindow().getSize());
-	exit_effect.addAffector(affector);
+	exit_effect.addClearRectangle();
+	exit_effect.addAffector(affector);*/
 	
 	setTransitionState(Transitions::None);
 }

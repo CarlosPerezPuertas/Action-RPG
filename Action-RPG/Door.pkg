@@ -1,0 +1,11 @@
+//toluac++ -o source/tolua_Door.cpp -H header/tolua_Door.h -n Door Door.pkg
+
+$#include "..\header\Door.h"
+
+
+class Door
+{
+	void open();
+	void close();
+	bool isClosed();
+};

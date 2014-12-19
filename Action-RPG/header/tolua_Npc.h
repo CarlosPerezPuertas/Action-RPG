@@ -1,6 +1,6 @@
 /*
 ** Lua binding: Npc
-** Generated automatically by tolua++-1.0.92 on 05/09/14 14:48:10.
+** Generated automatically by tolua++-1.0.92 on 05/24/14 14:56:48.
 */
 
 /* Exported function */

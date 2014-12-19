@@ -33,7 +33,10 @@ namespace ga
 		inline bool isPlaying(){ return playing; }
 		inline bool isUniqueLoop() { return loop_map.find(state) != loop_map.end(); }
 		inline void setUniqueLoop(int id){ loop_map.insert(id); }
+		inline void forward(){ frame_itr = frame_map[state].begin(); is_forward = true; }
+		inline void rewind(){ frame_itr = frame_map[state].begin(); is_rewind = true; }
 		inline bool isEndLoop(){ return end_loop; }
+		inline sf::Vector2f getFrameCenter(){ return sf::Vector2f(frame_itr->width/2.f, frame_itr->height/2.f); }
 
 	private:
 		sf::Sprite &sprite;
@@ -47,6 +50,8 @@ namespace ga
 		bool     playing;
 		bool     iterator_initialized;
 		bool     end_loop;
+		bool     is_forward;
+		bool     is_rewind;
 	};
 
 }

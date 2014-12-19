@@ -1,3 +1,7 @@
+
+
+
+
 function isQuestFinished(quest)
 
 	local finished = true
@@ -13,28 +17,33 @@ function isQuestFinished(quest)
 end
 
 
-function firstQuest()
-
-	if not (ghost1[1] == nil) then
-		if ghost1[1]:isTalking() then
-				--Init second quest
-				ghost1[1]:setText("Conmigo ya hablaste")
-				ghost[1]:setText("Calla gilipollas")
-			return true
-		end
+function initQuest()
+	if not (ghost1[1] == nil) and not (ghost[1] == nil) then
+		ghost[1]:setText("Habla con el guardian, te está esperando en la salida del pueblo.")
+		ghost1[1]:setText("Te desbloquearé la puerta para que puedas pasar.")
+		return true
 	end
 
 	return false
+
 end
 
+currentQuest = initQuest
 
-function secondQuest()
 
-	if not (ghost1[1] == nil) and not (ghost[1] == nil) then
-		if isQuestFinished("FirstQuest") then
-			if ghost[1]:isTalking() then
-				ghost1[1]:setText("Clyde te odia")
-				ghost[1]:setText("No vuelvas a hablarme")
+function firstQuest()
+	if not (ghost1[1] == nil) then
+		if isQuestFinished("InitQuest") then
+			--print(ghost1[1]:isTalking(), " SECOND QUEST")
+			if ghost1[1]:isTalking() or firstQuest == currentQuest  then
+					--Init second quest
+					if tiledGetDoor("door01"):isClosed() then
+					--	print("tiledGet OK")
+						tiledGetDoor("door01"):open()
+					end
+					ghost[1]:setText("Muchas veces huir es la única escapatoria.")
+					ghost1[1]:setText("Ahí fuera merodean alimañas y entes que actúan de forma incomprensible para nosotros. Ve con cuidado.")
+					--door01:open()
 				return true
 			end
 		end
@@ -43,34 +52,31 @@ function secondQuest()
 	return false
 end
 
-events = { ["FirstQuest"] =  firstQuest, ["SecondQuest"] =  secondQuest }
 
 
-function setToNil(object)
 
-	--entities[#entities][1] = nil
-	--for a in values(entities) do
-	for i = 1 , #entities do
-		if entities[i][1] == object then
-			print("Hola")
-			entities[i][1] = nil
-		end
-	end
-
-	--if ghost1[1] == nil then print("Ghost is nil") end
-end
-
+events = { ["InitQuest"] = initQuest, ["FirstQuest"] =  firstQuest}
 
 --Update events
 --When the events are triggered we delete them
 function updateEvents()
+	--print(isQuestFinished("InitQuest"))
 	for n, trigger in pairs(events) do
 		if trigger() then
+			currentQuest = trigger
+			--print(n, " is nil")
 			events[n] = nil
 		end
 	end
+end
 
-	--print(isQuestFinished("FirstQuest"))
+
+--When we change level we destruct the entities and the info of the quests
+--so when we return to the level the data is recorded in "currentQuest
+function initQuests()
+
+
+	currentQuest()
 end
 
 

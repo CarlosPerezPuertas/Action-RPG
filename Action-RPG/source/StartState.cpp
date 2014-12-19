@@ -47,7 +47,9 @@ void StartState::createScene()
 	pacman_logo->moveDuring(sf::Vector2f(0.f, 1.f), 2.5f);
 	layers[0]->addChild(std::move(pacman_logo));
 
-	std::unique_ptr<Text> press_key(new Text("PRESS ANY KEY TO START", "fonts/Press Start Regular.ttf", 20));
+	std::unique_ptr<Text> press_key(new Text("PRESS ANY KEY TO START"));
+	press_key->setFont("fonts/Press Start Regular.ttf");
+	press_key->setSize(20);
 	press_key->setPosition(sf::Vector2f(135.f, 600.f));
 	press_key->desactivate(2.5f);
 	layers[0]->addChild(std::move(press_key));

@@ -1,6 +1,6 @@
 /*
 ** Lua binding: Hero
-** Generated automatically by tolua++-1.0.92 on 05/06/14 23:53:41.
+** Generated automatically by tolua++-1.0.92 on 05/26/14 18:28:44.
 */
 
 #ifndef __cplusplus
@@ -296,6 +296,45 @@ static int tolua_Hero_Hero_scale00(lua_State* tolua_S)
 }
 #endif //#ifndef TOLUA_DISABLE
 
+/* method: setCollisionRect of class  Hero */
+#ifndef TOLUA_DISABLE_tolua_Hero_Hero_setCollisionRect00
+static int tolua_Hero_Hero_setCollisionRect00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+     !tolua_isusertype(tolua_S,1,"Hero",0,&tolua_err) ||
+     !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
+     !tolua_isnumber(tolua_S,3,0,&tolua_err) ||
+     !tolua_isnumber(tolua_S,4,0,&tolua_err) ||
+     !tolua_isnumber(tolua_S,5,0,&tolua_err) ||
+     !tolua_isnoobj(tolua_S,6,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  Hero* self = (Hero*)  tolua_tousertype(tolua_S,1,0);
+  float x = ((float)  tolua_tonumber(tolua_S,2,0));
+  float y = ((float)  tolua_tonumber(tolua_S,3,0));
+  float w = ((float)  tolua_tonumber(tolua_S,4,0));
+  float h = ((float)  tolua_tonumber(tolua_S,5,0));
+#ifndef TOLUA_RELEASE
+  if (!self) tolua_error(tolua_S,"invalid 'self' in function 'setCollisionRect'", NULL);
+#endif
+  {
+   self->setCollisionRect(x,y,w,h);
+  }
+ }
+ return 0;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'setCollisionRect'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
 /* method: addAnimationFrames of class  Hero */
 #ifndef TOLUA_DISABLE_tolua_Hero_Hero_addAnimationFrames00
 static int tolua_Hero_Hero_addAnimationFrames00(lua_State* tolua_S)
@@ -341,6 +380,39 @@ static int tolua_Hero_Hero_addAnimationFrames00(lua_State* tolua_S)
 }
 #endif //#ifndef TOLUA_DISABLE
 
+/* method: initAnimation of class  Hero */
+#ifndef TOLUA_DISABLE_tolua_Hero_Hero_initAnimation00
+static int tolua_Hero_Hero_initAnimation00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+     !tolua_isusertype(tolua_S,1,"Hero",0,&tolua_err) ||
+     !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
+     !tolua_isnoobj(tolua_S,3,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  Hero* self = (Hero*)  tolua_tousertype(tolua_S,1,0);
+  const int state = ((const int)  tolua_tonumber(tolua_S,2,0));
+#ifndef TOLUA_RELEASE
+  if (!self) tolua_error(tolua_S,"invalid 'self' in function 'initAnimation'", NULL);
+#endif
+  {
+   self->initAnimation(state);
+  }
+ }
+ return 0;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'initAnimation'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
 /* Open function */
 TOLUA_API int tolua_Hero_open (lua_State* tolua_S)
 {
@@ -363,7 +435,9 @@ TOLUA_API int tolua_Hero_open (lua_State* tolua_S)
    tolua_function(tolua_S,"moveUp",tolua_Hero_Hero_moveUp00);
    tolua_function(tolua_S,"setPosition",tolua_Hero_Hero_setPosition00);
    tolua_function(tolua_S,"scale",tolua_Hero_Hero_scale00);
+   tolua_function(tolua_S,"setCollisionRect",tolua_Hero_Hero_setCollisionRect00);
    tolua_function(tolua_S,"addAnimationFrames",tolua_Hero_Hero_addAnimationFrames00);
+   tolua_function(tolua_S,"initAnimation",tolua_Hero_Hero_initAnimation00);
   tolua_endmodule(tolua_S);
  tolua_endmodule(tolua_S);
  return 1;

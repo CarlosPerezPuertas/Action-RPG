@@ -13,10 +13,12 @@ class Hero
 	void moveDown(int px);
 	void moveUp(int px);
 
-
 	void setPosition(float x, float y);
 	void scale(float x, float y);
+	void setCollisionRect(float x, float y, float w, float h);
+	
 
 	void addAnimationFrames(int anim_type, std::string distribution, std::string loop_type, int num_frames, int position, int width, int height);
+	void initAnimation(const int state);
 
 };

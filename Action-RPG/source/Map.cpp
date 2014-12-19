@@ -146,18 +146,24 @@ void Map::read_TMX(const std::string &filename)
 		
 			if (object_name == "Warp")
 			{
+				int i = 0;
+			
 				//Read rectangle rect
 				for (pugi::xml_node node_itr = node_data.first_child(); node_itr; node_itr = node_itr.next_sibling())
 				{
+					tmx_warp.push_back(TMX_Warp());
+
 					float left = node_itr.attribute("x").as_float();
 					float top = node_itr.attribute("y").as_float();
 					float width= node_itr.attribute("width").as_float();
 					float height = node_itr.attribute("height").as_float();
-					object_group.warp_rects.push_back(sf::FloatRect(left, top, width, height));
+					tmx_warp[i].rect = sf::FloatRect(left, top, width, height);
 
 					pugi::xml_node node_properties = node_itr.child("properties");
 
 					float x = -1, y = -1;
+					std::string level_script;
+					int animation_type = -1;
 
 					//Read warp destiny as a property
 					for (pugi::xml_node node_itr2 = node_properties.first_child(); node_itr2; node_itr2 = node_itr2.next_sibling())
@@ -166,15 +172,87 @@ void Map::read_TMX(const std::string &filename)
 
 						if (property_name == "x") x = node_itr2.attribute("value").as_float();
 						if (property_name == "y") y = node_itr2.attribute("value").as_float();
-						
+
+						if (property_name == "Lua script") level_script = node_itr2.attribute("value").as_string();
+						if (property_name == "Direction") animation_type = node_itr2.attribute("value").as_int();
 
 						if (x != -1 && y != -1)
 						{
-							object_group.warp_destinies.push_back(sf::Vector2f(x, y));
-							x = y = -1;	
+							tmx_warp[i].destiny = sf::Vector2f(x, y);
+							tmx_warp[i].level_script = level_script;
+							tmx_warp[i].orientation = animation_type;
+							x = y = -1;
 						}
-						
+					}	
+
+					i++;
+				}
+			}
+			else if (object_name == "Door")
+			{
+				int i = 0;
+				
+				//Read rectangle rect
+				for (pugi::xml_node node_itr = node_data.first_child(); node_itr; node_itr = node_itr.next_sibling())
+				{
+					tmx_door.push_back(TMX_Door());
+
+					float left = node_itr.attribute("x").as_float();
+					float top = node_itr.attribute("y").as_float();
+					float width = node_itr.attribute("width").as_float();
+					float height = node_itr.attribute("height").as_float();
+					tmx_door[i].rect = sf::FloatRect(left, top, width, height);
+
+					pugi::xml_node node_properties = node_itr.child("properties");
+
+					std::string door_name = "No";
+					std::string door_state = "No";
+					int texture_id = -1;
+					unsigned int frame_width = 0;
+					unsigned int frame_height = 0;
+					unsigned int frame_number = 0;
+
+					//Read warp destiny as a property
+					for (pugi::xml_node node_itr2 = node_properties.first_child(); node_itr2; node_itr2 = node_itr2.next_sibling())
+					{
+						std::string  property_name = node_itr2.attribute("name").as_string();
+
+						if (property_name == "Name")
+						{
+							door_name = node_itr2.attribute("value").as_string();
+							tmx_door[i].name = door_name;
+						}	
+						else if (property_name == "State")
+						{
+							door_state = node_itr2.attribute("value").as_string();
+							assert(door_state == "opened" || door_state == "closed");
+							bool bool_state = false;
+							if (door_state == "opened") bool_state = true;
+							tmx_door[i].state = bool_state;
+						}					
+						else if (property_name == "Texture type")
+						{
+							texture_id = node_itr2.attribute("value").as_int();
+							tmx_door[i].texture_id = texture_id;
+						}
+						else if (property_name == "Frame number")
+						{
+							frame_number = node_itr2.attribute("value").as_int();
+							tmx_door[i].frame_number = frame_number;
+						}
+						else if (property_name == "Frame width")
+						{
+							frame_width = node_itr2.attribute("value").as_int();
+							tmx_door[i].frame_width = frame_width;
+						}
+						else if (property_name == "Frame height")
+						{
+							frame_height = node_itr2.attribute("value").as_int();
+							tmx_door[i].frame_height = frame_height;
+						}
 					}
+
+					i++;
 				}
 			}
 		}
@@ -199,6 +277,7 @@ void Map::load_collision_map()
 		itr.rect.left = column * itr.rect.width;
 		itr.center.x = itr.rect.left + itr.rect.width / 2.f;
 		itr.center.y = itr.rect.top + itr.rect.height / 2.f;
+
 
 		
 

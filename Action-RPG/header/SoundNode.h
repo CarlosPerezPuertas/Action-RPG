@@ -9,6 +9,8 @@ class SoundNode : public SceneNode
 		explicit SoundNode(int c_type1, int c_type2, SoundBufferFactory &buffer_factory);
 		virtual ~SoundNode();
 
+		const SoundNode* getObject(){ return this; }
+
 		virtual unsigned int getCategory() const;
 		void play();
 		void playAfter(const float seconds);

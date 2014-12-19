@@ -3,25 +3,6 @@
 #include "Entity.h"
 #include "Map.h"
 
-enum class Direction
-{
-	None,
-	Up,
-	Down,
-	Left,
-	Right,
-	
-};
-
-
-enum GhostBehaviour
-{
-	None,
-	Chase,
-	Scatter,
-	Frightened,
-	CaveReturn
-};
 
 
 class MoveableObject : public Entity
@@ -30,7 +11,7 @@ class MoveableObject : public Entity
 		MoveableObject(){}
 		MoveableObject(sf::Texture &texture);
 		virtual ~MoveableObject();
-
+		const MoveableObject* getObject(){ return this; }
 
 		void move(const sf::Vector2f displacement);
 		void moveByMap(Direction dir, sf::Time dt);
@@ -40,22 +21,25 @@ class MoveableObject : public Entity
 		void goUp(sf::Time dt);
 
 		//Scripting functions
-		bool goLeftUntil(int px);
-		bool goRightUntil(int px);
-		bool goUpUntil(int px);
-		bool goDownUntil(int px);
-
+		bool goLeftUntil(int px, sf::Time dt);
+		bool goRightUntil(int px, sf::Time dt);
+		bool goUpUntil(int px, sf::Time dt);
+		bool goDownUntil(int px, sf::Time dt);
+		bool doNothing(sf::Time dt);
+		void applyForce(sf::Vector2f force, sf::Time dt);
 
 		inline const float getSpeed() const { return speed; }
 		inline const float getSpeedRatio() const { return speed * vel_ratio; }
 		void setSpeed(float c_speed, float c_ratio);
 		inline void setVelRatio(float c_vel_ratio){ vel_ratio = c_vel_ratio; }
 		inline float getVelRatio(){ return vel_ratio; }
-		
 
 		inline void addDirection(Direction direction){ possible_directions.insert(direction); }
 		inline void removeDirection(Direction direction){ possible_directions.erase(direction); }
 		inline bool isPossibleDirection(Direction direction){ return (possible_directions.find(direction) != possible_directions.end()) && direction != Direction::None; }
+		inline void addCollisionDirection(Direction direction){ collision_directions.insert(direction); }
+		inline void removeCollisionDirection(Direction direction){ collision_directions.erase(direction); }
+		inline bool isCollisionDirection(Direction direction){ return (collision_directions.find(direction) != collision_directions.end()); }
 		inline void setCurrentDirection(Direction direction){ current_direction = direction; parcial_displacement = 0; }
 		inline void setPreviousDirection(Direction direction){ previous_direction = direction; }
 		inline Direction getCurrentDirection(){ return current_direction; }
@@ -76,37 +60,27 @@ class MoveableObject : public Entity
 		inline void setIdTileMap(int num_tile) { tile_map_id = num_tile; }
 		inline int getTileMap(){ return tile_map_id; }
 
-		inline void setFrightenedRatio(float c_frightened_ratio){ frightened_ratio = c_frightened_ratio; }
-		inline float getFrightenedRatio(){ return frightened_ratio; }
-
-		inline void setCaveRatio(float c_cave_speed_ratio){ cave_speed_ratio = c_cave_speed_ratio; }
-		inline float getCaveRatio(){ return cave_speed_ratio; }
-
 		inline void setPreviousTileType(TileType previous){ previous_tile_type = previous; }
 		inline TileType getPreviousTileType(){ return previous_tile_type; }
+		inline sf::Vector2f getLastMovement(){ return last_movement; }
 
-		inline bool isElroy1(){ return is_elroy1; }
-		inline bool isElroy2(){ return is_elroy2; }
 		
 
 	protected:
 		float speed;
 		float vel_ratio;
-		float frightened_ratio;
-		float cave_speed_ratio;
 		int  tile_map_id;
-		bool is_elroy1;
-		bool is_elroy2;
 
+		sf::Vector2f last_movement;
 		float parcial_displacement;
 
 		std::set<Direction> possible_directions;
+		std::set<Direction> collision_directions;
 		Direction current_direction;
 		Direction previous_direction;
 		Direction orientation;
 		Direction collision_direction;
 		std::map<Direction, sf::Vector2f> movement_map;
-
 		TileType previous_tile_type;
 };
 

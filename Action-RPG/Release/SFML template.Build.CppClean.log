@@ -1,42 +1,52 @@
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\vc120.pdb
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\screenaffectors.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\scenenode.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\player.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\npc.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\moveableobject.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\map.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\luascripting.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\logostate.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\level.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\image.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\hero.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\gamestate.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\entity.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\commandqueue.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\collider.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\camera.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\animation.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\pugixml.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\main.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\gameapp.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\world.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\warp.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\tolua_npc.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\tolua_map.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\tolua_level.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\tolua_hero.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\text.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\staticobject.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\statestack.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\state.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\startstate.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\soundnode.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\screeneffect.obj
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\release\sfml template.exe
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\release\sfml template.pdb
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\sfml template.tlog\cl.command.1.tlog
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\sfml template.tlog\cl.read.1.tlog
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\sfml template.tlog\cl.write.1.tlog
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\sfml template.tlog\link.command.1.tlog
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\sfml template.tlog\link.read.1.tlog
-c:\users\samael\desktop\game scripting\game scripting test 15 change levels by script\sfml template\release\sfml template.tlog\link.write.1.tlog
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\vc120.pdb
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\map.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\luascripting.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\logostate.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\level.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\imagecontainer.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\image.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\heropanel.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\hero.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\gamestate.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\entity.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\enemy.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\door.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\commandqueue.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\collider.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\camera.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\animation.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\actiontree.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\pugixml.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\main.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\gameapp.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\tolua_npc.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\tolua_map.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\tolua_level.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\tolua_hero.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\tolua_enemy.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\tolua_door.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\textsistem.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\textbox.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\text.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\staticobject.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\statestack.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\state.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\startstate.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\soundnode.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\screeneffect.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\screenaffectors.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\scenenode.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\player.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\npc.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\moveableobject.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\world.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\weapon.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\warp.obj
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\release\sfml template.exe
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\release\sfml template.pdb
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\sfml template.tlog\cl.command.1.tlog
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\sfml template.tlog\cl.read.1.tlog
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\sfml template.tlog\cl.write.1.tlog
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\sfml template.tlog\link.command.1.tlog
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\sfml template.tlog\link.read.1.tlog
+c:\users\samael\desktop\game scripting\game scripting 42 funny events\sfml template\release\sfml template.tlog\link.write.1.tlog

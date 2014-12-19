@@ -1,6 +1,6 @@
 /*
 ** Lua binding: Npc
-** Generated automatically by tolua++-1.0.92 on 05/09/14 14:48:10.
+** Generated automatically by tolua++-1.0.92 on 05/24/14 14:56:48.
 */
 
 #ifndef __cplusplus
@@ -22,7 +22,6 @@ static int tolua_collect_Npc (lua_State* tolua_S)
 {
  Npc* self = (Npc*) tolua_tousertype(tolua_S,1,0);
 	Mtolua_delete(self);
-	std::cout << "Npc tolua delete" << std::endl;
 	return 0;
 }
 #endif
@@ -390,6 +389,45 @@ static int tolua_Npc_Npc_scale00(lua_State* tolua_S)
 }
 #endif //#ifndef TOLUA_DISABLE
 
+/* method: setCollisionRect of class  Npc */
+#ifndef TOLUA_DISABLE_tolua_Npc_Npc_setCollisionRect00
+static int tolua_Npc_Npc_setCollisionRect00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+     !tolua_isusertype(tolua_S,1,"Npc",0,&tolua_err) ||
+     !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
+     !tolua_isnumber(tolua_S,3,0,&tolua_err) ||
+     !tolua_isnumber(tolua_S,4,0,&tolua_err) ||
+     !tolua_isnumber(tolua_S,5,0,&tolua_err) ||
+     !tolua_isnoobj(tolua_S,6,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+#endif
+ {
+  Npc* self = (Npc*)  tolua_tousertype(tolua_S,1,0);
+  float x = ((float)  tolua_tonumber(tolua_S,2,0));
+  float y = ((float)  tolua_tonumber(tolua_S,3,0));
+  float w = ((float)  tolua_tonumber(tolua_S,4,0));
+  float h = ((float)  tolua_tonumber(tolua_S,5,0));
+#ifndef TOLUA_RELEASE
+  if (!self) tolua_error(tolua_S,"invalid 'self' in function 'setCollisionRect'", NULL);
+#endif
+  {
+   self->setCollisionRect(x,y,w,h);
+  }
+ }
+ return 0;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'setCollisionRect'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
 /* method: addAnimationFrames of class  Npc */
 #ifndef TOLUA_DISABLE_tolua_Npc_Npc_addAnimationFrames00
 static int tolua_Npc_Npc_addAnimationFrames00(lua_State* tolua_S)
@@ -492,6 +530,7 @@ TOLUA_API int tolua_Npc_open (lua_State* tolua_S)
    tolua_function(tolua_S,"displayText",tolua_Npc_Npc_displayText00);
    tolua_function(tolua_S,"setPosition",tolua_Npc_Npc_setPosition00);
    tolua_function(tolua_S,"scale",tolua_Npc_Npc_scale00);
+   tolua_function(tolua_S,"setCollisionRect",tolua_Npc_Npc_setCollisionRect00);
    tolua_function(tolua_S,"addAnimationFrames",tolua_Npc_Npc_addAnimationFrames00);
    tolua_function(tolua_S,"isTalking",tolua_Npc_Npc_isTalking00);
   tolua_endmodule(tolua_S);

@@ -44,10 +44,26 @@ struct TMX_Map
 	std::vector<TMX_Tile> collision_map;
 };
 
-struct ObjectGroup
+
+//#########Entity objects########
+
+struct TMX_Door
 {
-	std::vector<sf::FloatRect> warp_rects;
-	std::vector<sf::Vector2f> warp_destinies;
+	sf::FloatRect rect;
+	std::string name;
+	bool state;
+	unsigned int texture_id;
+	unsigned int frame_number;
+	unsigned int frame_width;
+	unsigned int frame_height;
+};
+
+struct TMX_Warp
+{
+	sf::FloatRect rect;
+	std::string level_script;
+	sf::Vector2f destiny;
+	int orientation;
 };
 
 
@@ -86,7 +102,8 @@ class Map : public sf::Drawable, public sf::Transformable
 
 	public:
 		TMX_Map tmx_info;
-		ObjectGroup object_group;
+		std::vector<TMX_Door> tmx_door;
+		std::vector<TMX_Warp> tmx_warp;
 
 	private:
 		std::vector<Layer> map_layers;

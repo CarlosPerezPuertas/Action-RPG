@@ -1,0 +1,28 @@
+//toluac++ -o source/tolua_Enemy.cpp -H header/tolua_Enemy.h -n Enemy Enemy.pkg
+
+$#include "..\header\Enemy.h"
+
+
+class Enemy
+{
+	Enemy(int c_texture_id);
+	~Enemy();
+
+
+	void moveRight(int px);
+	void moveLeft(int px);
+	void moveDown(int px);
+	void moveUp(int px);
+
+	void setText(std::string c_text);
+	void displayText();
+	void setPosition(float x, float y);
+	void scale(float x, float y);
+	void setCollisionRect(float x, float y, float w, float h);
+
+	void addAnimationFrames(int anim_type, std::string distribution, std::string loop_type, int num_frames, int position, int width, int height);
+
+
+	bool isTalking();
+
+};

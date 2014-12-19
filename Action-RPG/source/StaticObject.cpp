@@ -4,6 +4,7 @@
 StaticObject::StaticObject(sf::Texture &texture)
 : Entity(texture)
 {
+	key = "no";
 }
 
 

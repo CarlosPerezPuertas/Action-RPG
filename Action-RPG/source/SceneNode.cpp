@@ -1,5 +1,8 @@
 #include "..\header\SceneNode.h"
 
+#include "..\header\Door.h"
+
+
 
 SceneNode::SceneNode() 
 : parent(nullptr)
@@ -12,7 +15,10 @@ SceneNode::SceneNode()
 , lifetime_elapsed(sf::Time::Zero)
 , hasLifetime(false)
 , is_global(false)
+, key("SceneNode")
+, root(nullptr)
 {
+	num_nodes++;
 }
 
 
@@ -45,6 +51,7 @@ void SceneNode::drawChildren(sf::RenderTarget &target, sf::RenderStates states) 
 
 void SceneNode::update(CommandQueue &command_queue, const sf::Time df)
 {
+	//num_nodes = 0;
 	if (isActive())
 	{
 		updateCurrent(command_queue, df);
@@ -65,6 +72,7 @@ void SceneNode::updateCurrent(CommandQueue &command_queue, const sf::Time df)
 
 void SceneNode::updateChildren(CommandQueue &command_queue, const sf::Time df)
 {
+
 	for (auto &itr : children)
 	{
 		itr->update(command_queue, df);
@@ -73,7 +81,10 @@ void SceneNode::updateChildren(CommandQueue &command_queue, const sf::Time df)
 
 void SceneNode::addChild(PtrNode child)
 {
+
+	num_nodes++;
 	child->parent = this;
+	child->root = this->root;
 	children.push_back(std::move(child));
 }
 
@@ -83,6 +94,7 @@ void SceneNode::addChild(PtrNode child)
 // When PTRNODE RESULT is out of the scope it's deleted automatically
 void SceneNode::deleteChild(SceneNode &node)
 {
+	num_nodes--;
 	auto itr = std::find_if(children.begin(), children.end(), [&](PtrNode &ptr) ->bool {return ptr.get() == &node; });
 	assert(itr != children.end());
 
@@ -106,17 +118,8 @@ void SceneNode::removeFromScene()
 	}
 }
 
-void SceneNode::release()
-{
-	
 
-}
 
-void SceneNode::removeFromSceneNow()
-{
-	
-
-}
 
 //We delete the scene tree and the scene vector using recursion
 void SceneNode::deleteRemovable(std::vector<SceneNode*> &scene_vector)
@@ -126,7 +129,7 @@ void SceneNode::deleteRemovable(std::vector<SceneNode*> &scene_vector)
 
 	auto node_to_remove_begin = std::remove_if(scene_vector.begin(), scene_vector.end(), [&](SceneNode *node) {return node->isRemovable(); });
 	scene_vector.erase(node_to_remove_begin, scene_vector.end());
-	
+
 	std::for_each(children.begin(), children.end(), [&](PtrNode &node) 
 	{
 		node->deleteRemovable(scene_vector);
@@ -193,3 +196,16 @@ void SceneNode::deleteNonGlobal()
 	}
 
 }
+
+
+void SceneNode::findNode(std::string c_key, SceneNode *&aux)
+{
+	if (c_key == this->getKey()) aux = this;
+	for (auto& itr : children) itr->findNode(c_key, aux);
+}
+
+/*void SceneNode::findNode(std::string c_key, bool &aux)
+{
+	if (c_key == this->getKey()) aux = true;
+	for (auto& itr : children) itr->findNode(c_key, aux);
+}*/

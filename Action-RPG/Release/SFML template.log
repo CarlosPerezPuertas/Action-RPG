@@ -1,20 +1,30 @@
-﻿Build started 10/05/2014 1:39:33.
-     1>Project "C:\Users\Samael\Desktop\game scripting\Game scripting test 15 change levels by script\SFML template\SFML template.vcxproj" on node 2 (Build target(s)).
+﻿Build started 19/12/2014 18:54:10.
+     1>Project "C:\Users\Samael\Desktop\game scripting\Game scripting 43 Funny events\SFML template\SFML template.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\libraries\Thor-VS11x32\include" /I"C:\libraries\SFML-2.1-binaries\include" /IC:\libraries\LUA\5.1\include /I"C:\libraries\LUA\tolua++-1.0.93\tolua++-1.0.93\include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D SFML_DYNAMIC /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\World.cpp
+         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\libraries\Thor-VS11x32\include" /I"C:\libraries\SFML-2.1-binaries\include" /IC:\libraries\LUA\5.1\include /I"C:\libraries\LUA\tolua++-1.0.93\tolua++-1.0.93\include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D SFML_DYNAMIC /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\Collider.cpp source\Door.cpp source\Level.cpp source\SceneNode.cpp source\World.cpp source\tolua_Door.cpp
+         Collider.cpp
+         Door.cpp
+         Level.cpp
+         SceneNode.cpp
          World.cpp
+         tolua_Door.cpp
        Link:
-         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Samael\Desktop\game scripting\Game scripting test 15 change levels by script\Release\SFML template.exe" /NOLOGO /LIBPATH:"C:\libraries\Thor-VS11x32\lib" /LIBPATH:"C:\libraries\SFML-2.1-binaries\lib" /LIBPATH:C:\libraries\LUA\5.1\lib /LIBPATH:"C:\libraries\LUA\tolua++-1.0.93\tolua++-1.0.93\lib" "sfml-graphics.lib" "sfml-audio.lib" "sfml-window.lib" "sfml-system.lib" "sfml-main.lib" thor.lib lua51.lib tolua++.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Samael\Desktop\game scripting\Game scripting test 15 change levels by script\Release\SFML template.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Samael\Desktop\game scripting\Game scripting test 15 change levels by script\Release\SFML template.lib" /MACHINE:X86 /SAFESEH Release\GameApp.obj
+         C:\Program Files\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Samael\Desktop\game scripting\Game scripting 43 Funny events\Release\SFML template.exe" /NOLOGO /LIBPATH:"C:\libraries\Thor-VS11x32\lib" /LIBPATH:"C:\libraries\SFML-2.1-binaries\lib" /LIBPATH:C:\libraries\LUA\5.1\lib /LIBPATH:"C:\libraries\LUA\tolua++-1.0.93\tolua++-1.0.93\lib" "sfml-graphics.lib" "sfml-audio.lib" "sfml-window.lib" "sfml-system.lib" "sfml-main.lib" thor.lib lua51.lib tolua++.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Samael\Desktop\game scripting\Game scripting 43 Funny events\Release\SFML template.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Samael\Desktop\game scripting\Game scripting 43 Funny events\Release\SFML template.lib" /MACHINE:X86 /SAFESEH Release\GameApp.obj
          Release\main.obj
          Release\pugixml.obj
+         Release\ActionTree.obj
          Release\Animation.obj
          Release\Camera.obj
          Release\Collider.obj
          Release\CommandQueue.obj
+         Release\Door.obj
+         Release\Enemy.obj
          Release\Entity.obj
          Release\GameState.obj
          Release\Hero.obj
+         Release\HeroPanel.obj
          Release\Image.obj
+         Release\ImageContainer.obj
          Release\Level.obj
          Release\LogoState.obj
          Release\LuaScripting.obj
@@ -31,17 +41,22 @@
          Release\StateStack.obj
          Release\StaticObject.obj
          Release\Text.obj
+         Release\TextBox.obj
+         Release\TextSistem.obj
+         Release\tolua_Door.obj
+         Release\tolua_Enemy.obj
          Release\tolua_Hero.obj
          Release\tolua_Level.obj
          Release\tolua_Map.obj
          Release\tolua_Npc.obj
          Release\Warp.obj
+         Release\Weapon.obj
          Release\World.obj
          Generating code
          Finished generating code
-         SFML template.vcxproj -> C:\Users\Samael\Desktop\game scripting\Game scripting test 15 change levels by script\Release\SFML template.exe
-     1>Done Building Project "C:\Users\Samael\Desktop\game scripting\Game scripting test 15 change levels by script\SFML template\SFML template.vcxproj" (Build target(s)).
+         SFML template.vcxproj -> C:\Users\Samael\Desktop\game scripting\Game scripting 43 Funny events\Release\SFML template.exe
+     1>Done Building Project "C:\Users\Samael\Desktop\game scripting\Game scripting 43 Funny events\SFML template\SFML template.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:07.48
+Time Elapsed 00:00:36.73

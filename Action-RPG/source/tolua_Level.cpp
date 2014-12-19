@@ -1,6 +1,6 @@
 /*
 ** Lua binding: Level
-** Generated automatically by tolua++-1.0.92 on 05/08/14 21:30:27.
+** Generated automatically by tolua++-1.0.92 on 10/17/14 17:09:10.
 */
 
 #ifndef __cplusplus
@@ -22,7 +22,6 @@ static int tolua_collect_Level (lua_State* tolua_S)
 {
  Level* self = (Level*) tolua_tousertype(tolua_S,1,0);
 	Mtolua_delete(self);
-	std::cout << "delete level lua" << std::endl;
 	return 0;
 }
 #endif
@@ -32,9 +31,10 @@ static int tolua_collect_Level (lua_State* tolua_S)
 static void tolua_reg_types (lua_State* tolua_S)
 {
  tolua_usertype(tolua_S,"Hero");
+ tolua_usertype(tolua_S,"Map");
  tolua_usertype(tolua_S,"Level");
  tolua_usertype(tolua_S,"Npc");
- tolua_usertype(tolua_S,"Map");
+ tolua_usertype(tolua_S,"Enemy");
 }
 
 /* method: new of class  Level */
@@ -219,6 +219,34 @@ tolua_lerror:
 }
 #endif //#ifndef TOLUA_DISABLE
 
+/* method: addActor of class  Level */
+#ifndef TOLUA_DISABLE_tolua_Level_Level_addActor02
+static int tolua_Level_Level_addActor02(lua_State* tolua_S)
+{
+ tolua_Error tolua_err;
+ if (
+     !tolua_isusertype(tolua_S,1,"Level",0,&tolua_err) ||
+     !tolua_isusertype(tolua_S,2,"Enemy",0,&tolua_err) ||
+     !tolua_isnoobj(tolua_S,3,&tolua_err)
+ )
+  goto tolua_lerror;
+ else
+ {
+  Level* self = (Level*)  tolua_tousertype(tolua_S,1,0);
+  Enemy* node = ((Enemy*)  tolua_tousertype(tolua_S,2,0));
+#ifndef TOLUA_RELEASE
+  if (!self) tolua_error(tolua_S,"invalid 'self' in function 'addActor'", NULL);
+#endif
+  {
+   self->addActor(node);
+  }
+ }
+ return 0;
+tolua_lerror:
+ return tolua_Level_Level_addActor01(tolua_S);
+}
+#endif //#ifndef TOLUA_DISABLE
+
 /* method: setMap of class  Level */
 #ifndef TOLUA_DISABLE_tolua_Level_Level_setMap00
 static int tolua_Level_Level_setMap00(lua_State* tolua_S)
@@ -272,6 +300,7 @@ TOLUA_API int tolua_Level_open (lua_State* tolua_S)
    tolua_function(tolua_S,"addTexture",tolua_Level_Level_addTexture00);
    tolua_function(tolua_S,"addActor",tolua_Level_Level_addActor00);
    tolua_function(tolua_S,"addActor",tolua_Level_Level_addActor01);
+   tolua_function(tolua_S,"addActor",tolua_Level_Level_addActor02);
    tolua_function(tolua_S,"setMap",tolua_Level_Level_setMap00);
   tolua_endmodule(tolua_S);
  tolua_endmodule(tolua_S);

@@ -1,6 +1,7 @@
 #include "..\header\MoveableObject.h"
 
 
+
 MoveableObject::MoveableObject(sf::Texture &texture)
 : Entity(texture)
 , speed(0.f) //0px/second
@@ -8,19 +9,15 @@ MoveableObject::MoveableObject(sf::Texture &texture)
 , previous_direction(Direction::None)
 , tile_map_id(-1)
 , vel_ratio(0.f)
-, frightened_ratio(0.f)
-, cave_speed_ratio(0.f)
-, is_elroy1(false)
-, is_elroy2(false)
 , parcial_displacement(0.f)
 {
-	
-	
+	key = "no";
 }
 
 
 MoveableObject::~MoveableObject()
 {
+
 }
 
 void MoveableObject::setSpeed(float c_speed, float c_ratio)
@@ -36,6 +33,7 @@ void MoveableObject::setSpeed(float c_speed, float c_ratio)
 void MoveableObject::move(const sf::Vector2f displacement)
 {
 	setPosition(getPosition() + displacement);
+	last_movement = displacement;
 }
 
 void MoveableObject::moveByMap(Direction dir, sf::Time dt)
@@ -50,28 +48,31 @@ void MoveableObject::goLeft(sf::Time dt)
 {
 	parcial_displacement += abs(movement_map[Direction::Left].x * dt.asSeconds());
 	setPosition(getPosition() + sf::Vector2f(movement_map[Direction::Left].x * dt.asSeconds(), 0));
+	last_movement = sf::Vector2f(movement_map[Direction::Left].x * dt.asSeconds(), 0);
 }
 
 void MoveableObject::goRight(sf::Time dt)
 {
 	parcial_displacement += abs(movement_map[Direction::Right].x * dt.asSeconds());
 	setPosition(getPosition() + sf::Vector2f(movement_map[Direction::Right].x * dt.asSeconds(), 0));
+	last_movement = sf::Vector2f(movement_map[Direction::Right].x * dt.asSeconds(), 0);
 }
 
 void MoveableObject::goDown(sf::Time dt)
 {
 	parcial_displacement += abs(movement_map[Direction::Down].y * dt.asSeconds());
 	setPosition(getPosition() + sf::Vector2f(0, movement_map[Direction::Down].y * dt.asSeconds()));
+	last_movement = sf::Vector2f(0, movement_map[Direction::Down].y * dt.asSeconds());
 }
 
 void MoveableObject::goUp(sf::Time dt)
 {
 	parcial_displacement += abs(movement_map[Direction::Up].y * dt.asSeconds());
 	setPosition(getPosition() + sf::Vector2f(0, movement_map[Direction::Up].y * dt.asSeconds()));
-
+	last_movement = sf::Vector2f(0, movement_map[Direction::Up].y * dt.asSeconds());
 }
 
-bool MoveableObject::goRightUntil(int px)
+bool MoveableObject::goRightUntil(int px, sf::Time dt)
 {
 	if (parcial_displacement <= px)
 	{
@@ -87,7 +88,7 @@ bool MoveableObject::goRightUntil(int px)
 	return false;
 }
 
-bool MoveableObject::goLeftUntil(int px)
+bool MoveableObject::goLeftUntil(int px, sf::Time dt)
 {
 	if (parcial_displacement <= px)
 	{
@@ -103,7 +104,7 @@ bool MoveableObject::goLeftUntil(int px)
 	return false;
 }
 
-bool MoveableObject::goUpUntil(int px)
+bool MoveableObject::goUpUntil(int px, sf::Time dt)
 {
 	if (parcial_displacement <= px)
 	{
@@ -119,7 +120,7 @@ bool MoveableObject::goUpUntil(int px)
 	return false;
 }
 
-bool MoveableObject::goDownUntil(int px)
+bool MoveableObject::goDownUntil(int px, sf::Time dt)
 {
 
 	if (parcial_displacement <= px)
@@ -134,5 +135,16 @@ bool MoveableObject::goDownUntil(int px)
 	}
 
 	return false;
+}
+
+bool MoveableObject::doNothing(sf::Time dt)
+{
+	return false;
+
+}
+
+void MoveableObject::applyForce(sf::Vector2f force, sf::Time dt)
+{
+	sf::Transformable::setPosition(getPosition().x + force.x * dt.asSeconds(), getPosition().y + force.y* dt.asSeconds());
 }
 

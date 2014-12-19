@@ -10,8 +10,10 @@ sprite(c_sprite)     //link with the sprite of the entity
 , iterator_initialized(false)
 , playing(false)
 , end_loop(false)
+, is_forward(false)
+, is_rewind(false)
 {
-
+	
 }
 
 
@@ -24,15 +26,19 @@ void ga::Animation::update(const sf::Time dt)
 		elapsed -= dt;
 		assert(iterator_initialized == true); //assert if the iterator it's not initialized
 
-		if (elapsed <= sf::Time::Zero)
+		sprite.setOrigin(frame_itr->width / 2.f, frame_itr->height / 2.f); //Origin in the center
+
+		if (elapsed <= sf::Time::Zero && end_loop == false)
 		{
 			++frame_itr;
 
 			//Restart the animation
 			if (frame_itr == frame_map[state].end())
 			{
-				if (isUniqueLoop()) { stop(); end_loop = true; }
 				frame_itr = frame_map[state].begin();
+				if (isUniqueLoop()) { stop(); end_loop = true; }
+				else if (is_forward) { frame_itr = frame_map[state].end() - 1; stop(); end_loop = true; is_forward = false; }
+				else if (is_rewind) { frame_itr = frame_map[state].end() - 1; stop(); end_loop = true; is_rewind = false; }
 			}
 
 			elapsed = frame_rate;
@@ -75,5 +81,6 @@ void ga::Animation::changeState(const int id)
 	frame_itr = frame_map[id].begin();
 	assert(frame_itr != frame_map[id].end()); //Assert if the id doesn't exist
 	sprite.setTextureRect(*frame_itr);
+	sprite.setOrigin(getFrameCenter());
 
 }
